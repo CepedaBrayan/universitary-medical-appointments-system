@@ -13,13 +13,13 @@ export class WorkshopsService {
 
   async findAll() {
     try {
-    const allWorkshops = await prisma.workshop.findMany();
-    if(allWorkshops) {return allWorkshops;}
-    else return "No workshops found";
+      const allWorkshops = await prisma.workshop.findMany();
+      if (allWorkshops) {
+        return allWorkshops;
+      } else return { message: 'No workshops found' };
     } catch (error) {
-      return "Failed "+ error;
+      return { message: 'Failed ' + error };
     }
-    
   }
 
   async findOne(id: number) {
@@ -29,12 +29,12 @@ export class WorkshopsService {
           id: id,
         },
       });
-      if(foundWorkshop) {return foundWorkshop;}
-      else return "Workshop not found";
+      if (foundWorkshop) {
+        return foundWorkshop;
+      } else return { message: 'Workshop not found' };
     } catch (error) {
-      return "Failed "+ error;
+      return { message: 'Failed ' + error };
     }
-    
   }
 
   update(id: number, updateWorkshopDto: UpdateWorkshopDto) {
