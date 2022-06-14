@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateWorkshopDto } from './dto/create-workshop.dto';
 import { UpdateWorkshopDto } from './dto/update-workshop.dto';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 @Injectable()
 export class WorkshopsService {
@@ -8,12 +11,30 @@ export class WorkshopsService {
     return 'This action adds a new workshop';
   }
 
-  findAll() {
-    return `This action returns all workshops`;
+  async findAll() {
+    try {
+    const allWorkshops = await prisma.workshop.findMany();
+    if(allWorkshops) {return allWorkshops;}
+    else return "No workshops found";
+    } catch (error) {
+      return "Failed "+ error;
+    }
+    
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} workshop`;
+  async findOne(id: number) {
+    try {
+      const foundWorkshop = await prisma.workshop.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if(foundWorkshop) {return foundWorkshop;}
+      else return "Workshop not found";
+    } catch (error) {
+      return "Failed "+ error;
+    }
+    
   }
 
   update(id: number, updateWorkshopDto: UpdateWorkshopDto) {
