@@ -38,8 +38,8 @@ model psychology {
   active              Boolean
   reiting_average     Float                 @db.Float
   appointment_number  Int
-  created_at          DateTime              @db.DateTime(0)
-  updated_at          DateTime              @db.DateTime(0)
+  created_at          DateTime              @default(now()) @db.DateTime(0)
+  updated_at          DateTime              @default(now()) @db.DateTime(0)
   medical_appointment medical_appointment[]
 }
 
