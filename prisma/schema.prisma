@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model medical_appointment {
+  id                 Int        @id @default(autoincrement())
+  student_id         Int
+  psycho_id          Int
+  date_request       DateTime   @db.DateTime(0)
+  date_appointment   DateTime   @db.DateTime(0)
+  status_appointment String     @db.VarChar(20)
+  psycho_diagnosis   String     @db.VarChar(200)
+  student_raiting    String     @db.VarChar(50)
+  psycho_treatment   Int
+  created_at         DateTime   @db.DateTime(0)
+  updated_at         DateTime   @db.DateTime(0)
+  psychology         psychology @relation(fields: [psycho_id], references: [id], onUpdate: Restrict, map: "medical_appointment_ibfk_2")
+  student            student    @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "medical_appointment_ibfk_1")
+
+  @@index([psycho_id], map: "psycho_id")
+  @@index([student_id], map: "student_id")
+}
+
+model psychology {
+  id                  Int                   @id @default(autoincrement())
+  nickname            String                @unique(map: "nickname") @db.VarChar(20)
+  name                String                @db.VarChar(25)
+  password            String                @db.VarChar(25)
+  email               String                @db.VarChar(25)
+  phone               String                @db.VarChar(15)
+  city                String                @db.VarChar(25)
+  code_psychology     String                @db.VarChar(7)
+  active              Boolean
+  reiting_average     Float                 @db.Float
+  appointment_number  Int
+  created_at          DateTime              @db.DateTime(0)
+  updated_at          DateTime              @db.DateTime(0)
+  medical_appointment medical_appointment[]
+}
+
+model student {
+  id                  Int                   @id @default(autoincrement())
+  nickname            String                @unique(map: "nickname") @db.VarChar(20)
+  name                String                @db.VarChar(25)
+  password            String                @db.VarChar(25)
+  email               String                @db.VarChar(25)
+  phone               String                @db.VarChar(15)
+  city                String                @db.VarChar(25)
+  code_student        String                @db.VarChar(7)
+  academic_program    Int
+  semester            Int
+  created_at          DateTime              @db.DateTime(0)
+  updated_at          DateTime              @db.DateTime(0)
+  medical_appointment medical_appointment[]
+}
+
+model superuser {
+  id                 Int      @id @default(autoincrement())
+  nickname           String   @unique(map: "nickname") @db.VarChar(30)
+  password_superuser String   @db.VarChar(30)
+  created_at         DateTime @db.DateTime(0)
+  updated_at         DateTime @db.DateTime(0)
+}
+
+model workshop {
+  id         Int      @id @default(autoincrement())
+  title      String   @unique(map: "title") @db.VarChar(30)
+  image      String   @db.VarChar(200)
+  body       String   @db.VarChar(100)
+  created_at DateTime @db.DateTime(0)
+  updated_at DateTime @db.DateTime(0)
+}
