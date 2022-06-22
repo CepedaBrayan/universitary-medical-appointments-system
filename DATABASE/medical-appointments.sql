@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-06-2022 a las 14:50:03
+-- Tiempo de generación: 22-06-2022 a las 16:02:26
 -- Versión del servidor: 10.4.16-MariaDB
 -- Versión de PHP: 7.4.12
 
@@ -24,6 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `frequent_questions`
+--
+
+CREATE TABLE `frequent_questions` (
+  `id` int(11) NOT NULL,
+  `question` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `answer` varchar(500) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `asked_by` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `answered_by` varchar(50) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `frequent_questions`
+--
+
+INSERT INTO `frequent_questions` (`id`, `question`, `answer`, `asked_by`, `answered_by`, `created_at`, `updated_at`) VALUES
+(1, 'Cuándo me voy a recuperar', 'No lo sé Rick', 'Psycho', 'Psycho', '2022-06-22 08:57:26', '2022-06-22 08:57:26'),
+(2, 'Cuándo me voy a recuperar de esto?', 'No lo sé Rick', 'Student', 'Psycho', '2022-06-22 09:01:13', '2022-06-22 09:01:13'),
+(3, 'Cuándo me voy a recuperar de esto??', NULL, 'Anonymous', NULL, '2022-06-22 13:29:39', '2022-06-22 13:29:39');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `medical_appointment`
 --
 
@@ -37,8 +62,8 @@ CREATE TABLE `medical_appointment` (
   `psycho_diagnosis` varchar(200) NOT NULL,
   `student_rating` varchar(50) NOT NULL,
   `psycho_treatment` varchar(100) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -59,8 +84,8 @@ CREATE TABLE `psychology` (
   `active` tinyint(1) DEFAULT 1,
   `rating_average` float DEFAULT NULL,
   `appointments_number` int(11) DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -68,7 +93,9 @@ CREATE TABLE `psychology` (
 --
 
 INSERT INTO `psychology` (`id`, `nickname`, `name`, `password`, `email`, `phone`, `city`, `code_psychology`, `active`, `rating_average`, `appointments_number`, `created_at`, `updated_at`) VALUES
-(1, 'm', 'string', '$2b$10$RgDjliFpzNAWhx.HZT', 'string', 'string', 'string', '11', 1, 10, 5, '2022-06-14 23:20:17', '2022-06-14 23:20:17');
+(1, 'm', 'string', '$2b$10$RgDjliFpzNAWhx.HZT', 'string', 'string', 'string', '11', 1, 10, 5, '2022-06-14 23:20:17', '2022-06-14 23:20:17'),
+(3, 'ma', 'string', '$2b$10$fn5OFOk/aycZYG75ScXCQuDT/0Opw72oeEUlQacOFYHI7JNJfSphu', 'string@', 'string', 'string', '111', 1, 0, 5, '2022-06-22 12:52:10', '2022-06-22 12:52:10'),
+(4, 'mas', 'string', '$2b$10$Jrp1hpCj7nHsQaM4ubrJ6e1Tf1IcvWZB69zyuJ2hqe7VGg99rmRL6', 'string@a', 'string', 'string', '1112', 1, 0, 5, '2022-06-22 12:52:58', '2022-06-22 12:52:58');
 
 -- --------------------------------------------------------
 
@@ -87,8 +114,8 @@ CREATE TABLE `student` (
   `code_student` varchar(7) NOT NULL,
   `academic_program` int(5) NOT NULL,
   `semester` int(3) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -111,8 +138,8 @@ CREATE TABLE `superuser` (
   `id` int(11) NOT NULL,
   `nickname` varchar(30) NOT NULL,
   `password_superuser` varchar(100) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `updated_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -126,8 +153,8 @@ CREATE TABLE `workshop` (
   `title` varchar(30) NOT NULL,
   `image` varchar(200) NOT NULL,
   `body` varchar(500) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -154,6 +181,13 @@ INSERT INTO `workshop` (`id`, `title`, `image`, `body`, `created_at`, `updated_a
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `frequent_questions`
+--
+ALTER TABLE `frequent_questions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `question` (`question`);
 
 --
 -- Indices de la tabla `medical_appointment`
@@ -200,6 +234,12 @@ ALTER TABLE `workshop`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `frequent_questions`
+--
+ALTER TABLE `frequent_questions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `medical_appointment`
 --
 ALTER TABLE `medical_appointment`
@@ -209,7 +249,7 @@ ALTER TABLE `medical_appointment`
 -- AUTO_INCREMENT de la tabla `psychology`
 --
 ALTER TABLE `psychology`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `student`
