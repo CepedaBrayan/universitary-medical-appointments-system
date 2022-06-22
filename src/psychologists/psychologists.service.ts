@@ -3,12 +3,15 @@ import { CreatePsychologistDto } from './dto/create-psychologist.dto';
 import { LoginPsychologistDto } from './dto/login-psychologist.dto';
 import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
 
 const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 
 @Injectable()
 export class PsychologistsService {
+  constructor(private jwtService: JwtService) {}
+
   async create(createPsychologistDto: CreatePsychologistDto) {
     try {
       const psychoCode = await prisma.psychology.findMany({
@@ -26,9 +29,12 @@ export class PsychologistsService {
           email: createPsychologistDto.email,
         },
       });
-      if (psychoCode.length > 0) return { message: 'Psychologist code already exists' };
-      else if (psychoEmail.length > 0) return { message: 'Psychologist email already exists' };
-      else if (psychoNickname.length > 0) return { message: 'Psychologist nickname already exists' };
+      if (psychoCode.length > 0)
+        return { message: 'Psychologist code already exists' };
+      else if (psychoEmail.length > 0)
+        return { message: 'Psychologist email already exists' };
+      else if (psychoNickname.length > 0)
+        return { message: 'Psychologist nickname already exists' };
       else {
         const newPsycho = await prisma.psychology.create({
           data: {
@@ -55,11 +61,30 @@ export class PsychologistsService {
   }
 
   async login(loginPsychologistDto: LoginPsychologistDto) {
-    return 'Psychologist logged in';
-  }
-
-  async logout() {
-    return 'Psychologist logged out';
+    try {
+      const psycho = await prisma.psychology.findUnique({
+        where: {
+          nickname: loginPsychologistDto.nickname,
+        },
+      });
+      if (
+        psycho &&
+        !(await bcrypt.compare(loginPsychologistDto.password, psycho.password))
+      )
+        return { message: 'Password incorrect' };
+      if (
+        psycho &&
+        (await bcrypt.compare(loginPsychologistDto.password, psycho.password))
+      ) {
+        const payload = {
+          id: psycho.id,
+          nickname: psycho.nickname,
+        };
+        return { access_token: this.jwtService.sign(payload) };
+      } else return { message: 'Psychologist not found, verify credentials' };
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
   }
 
   findAll() {

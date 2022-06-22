@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { LoginStudentDto } from './dto/login-student.dto';
@@ -21,11 +29,6 @@ export class StudentsController {
   @Post('/login')
   login(@Body() loginStudentDto: LoginStudentDto) {
     return this.studentsService.login(loginStudentDto);
-  }
-
-  @Get('/logout')
-  logout() {
-    return this.studentsService.logout();
   }
 
   @Get(':id')

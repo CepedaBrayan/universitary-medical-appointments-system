@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PsychologistsService } from './psychologists.service';
 import { CreatePsychologistDto } from './dto/create-psychologist.dto';
 import { LoginPsychologistDto } from './dto/login-psychologist.dto';
@@ -23,18 +31,16 @@ export class PsychologistsController {
     return this.psychologistsService.login(loginPsychologistDto);
   }
 
-  @Get('/logout')
-  logout() {
-    return this.psychologistsService.logout();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.psychologistsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePsychologistDto: UpdatePsychologistDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePsychologistDto: UpdatePsychologistDto,
+  ) {
     return this.psychologistsService.update(+id, updatePsychologistDto);
   }
 
