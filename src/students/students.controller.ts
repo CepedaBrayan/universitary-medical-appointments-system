@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { LoginStudentDto } from './dto/login-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('students')
@@ -15,6 +16,16 @@ export class StudentsController {
   @Get()
   findAll() {
     return this.studentsService.findAll();
+  }
+
+  @Post('/login')
+  login(@Body() loginStudentDto: LoginStudentDto) {
+    return this.studentsService.login(loginStudentDto);
+  }
+
+  @Get('/logout')
+  logout() {
+    return this.studentsService.logout();
   }
 
   @Get(':id')

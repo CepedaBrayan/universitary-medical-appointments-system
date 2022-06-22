@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PsychologistsService } from './psychologists.service';
 import { CreatePsychologistDto } from './dto/create-psychologist.dto';
+import { LoginPsychologistDto } from './dto/login-psychologist.dto';
 import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
 
 @Controller('psychologists')
@@ -15,6 +16,16 @@ export class PsychologistsController {
   @Get()
   findAll() {
     return this.psychologistsService.findAll();
+  }
+
+  @Post('/login')
+  login(@Body() loginPsychologistDto: LoginPsychologistDto) {
+    return this.psychologistsService.login(loginPsychologistDto);
+  }
+
+  @Get('/logout')
+  logout() {
+    return this.psychologistsService.logout();
   }
 
   @Get(':id')

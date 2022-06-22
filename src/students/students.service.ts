@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { LoginStudentDto } from './dto/login-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { env } from 'process';
@@ -52,6 +53,14 @@ export class StudentsService {
     } catch (error) {
       return { message: 'Failed ' + error };
     }
+  }
+
+  async login(loginStudentDto: LoginStudentDto) {
+    return 'Student logged in';
+  }
+
+  async logout() {
+    return 'Student logged out';
   }
 
   findAll() {

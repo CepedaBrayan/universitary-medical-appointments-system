@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePsychologistDto } from './dto/create-psychologist.dto';
+import { LoginPsychologistDto } from './dto/login-psychologist.dto';
 import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 
@@ -51,6 +52,14 @@ export class PsychologistsService {
     } catch (error) {
       return { message: 'Failed ' + error };
     }
+  }
+
+  async login(loginPsychologistDto: LoginPsychologistDto) {
+    return 'Psychologist logged in';
+  }
+
+  async logout() {
+    return 'Psychologist logged out';
   }
 
   findAll() {
