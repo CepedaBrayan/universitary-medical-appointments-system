@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-06-2022 a las 22:17:31
+-- Tiempo de generación: 22-06-2022 a las 14:50:03
 -- Versión del servidor: 10.4.16-MariaDB
 -- Versión de PHP: 7.4.12
 
@@ -56,9 +56,9 @@ CREATE TABLE `psychology` (
   `phone` varchar(15) NOT NULL,
   `city` varchar(25) NOT NULL,
   `code_psychology` varchar(7) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 1,
+  `active` tinyint(1) DEFAULT 1,
   `rating_average` float DEFAULT NULL,
-  `appointments_number` int(11) NOT NULL DEFAULT 0,
+  `appointments_number` int(11) DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -96,7 +96,10 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `nickname`, `name`, `password`, `email`, `phone`, `city`, `code_student`, `academic_program`, `semester`, `created_at`, `updated_at`) VALUES
-(1, 'string', 'string', 'string', 'string', 'string', 'string', 'string', 1, 1, '2022-06-14 16:24:49', '2022-06-14 16:24:49');
+(1, 'string', 'string', 'string', 'string', 'string', 'string', 'string', 1, 1, '2022-06-14 16:24:49', '2022-06-14 16:24:49'),
+(15, 'stringfy', 'string', '$2b$10$WzP2IZmm14Zq7Zw7PsENSO6Z73Dgi9pqXFJ49OfUq8Ed1IT22liM6', 'string@string.es', 'string', 'string', '11', 1, 10, '2022-06-22 12:38:53', '2022-06-22 12:38:53'),
+(16, 'Juan Pablo', 'JP', '$2b$10$x3czl2vly0D9S141sIXeP.UN20.43.dl9afog8DTTfri0SsaFZ0Xq', 'JP@string.es', '000000', 'string', '13', 1, 10, '2022-06-22 12:43:16', '2022-06-22 12:43:16'),
+(17, 'Juan Pablov', 'JP', '$2b$10$XDPVh/VIIdtX0RGDxkA4h.NuV8moMLIGqxd3KDB/nc.O6DmXqWNcq', 'JP@string.esp', '000000', 'string', '131', 1, 10, '2022-06-22 12:47:58', '2022-06-22 12:47:58');
 
 -- --------------------------------------------------------
 
@@ -166,8 +169,8 @@ ALTER TABLE `medical_appointment`
 ALTER TABLE `psychology`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nickname` (`nickname`),
-  ADD UNIQUE KEY `phone` (`phone`),
-  ADD UNIQUE KEY `code_psychology` (`code_psychology`);
+  ADD UNIQUE KEY `code_psychology` (`code_psychology`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indices de la tabla `student`
@@ -212,7 +215,7 @@ ALTER TABLE `psychology`
 -- AUTO_INCREMENT de la tabla `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `superuser`

@@ -22,8 +22,14 @@ export class StudentsService {
           nickname: createStudentDto.nickname,
         },
       });
-      if (studentCode.length > 0 || studentNickname.length > 0)
-        return { message: 'Student already exists' };
+      const studentEmail = await prisma.student.findMany({
+        where: {
+          email: createStudentDto.email,
+        },
+      });
+      if (studentCode.length > 0) return { message: 'Student code already exists' };
+      else if (studentEmail.length > 0) return { message: 'Student email already exists' };
+      else if (studentNickname.length > 0) return { message: 'Student nickname already exists' };
       else {
         const newStudent = await prisma.student.create({
           data: {

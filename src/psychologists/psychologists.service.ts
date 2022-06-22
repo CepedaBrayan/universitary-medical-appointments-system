@@ -20,8 +20,14 @@ export class PsychologistsService {
           nickname: createPsychologistDto.nickname,
         },
       });
-      if (psychoCode.length > 0 || psychoNickname.length > 0)
-        return { message: 'Psychologist already exists' };
+      const psychoEmail = await prisma.psychology.findMany({
+        where: {
+          email: createPsychologistDto.email,
+        },
+      });
+      if (psychoCode.length > 0) return { message: 'Psychologist code already exists' };
+      else if (psychoEmail.length > 0) return { message: 'Psychologist email already exists' };
+      else if (psychoNickname.length > 0) return { message: 'Psychologist nickname already exists' };
       else {
         const newPsycho = await prisma.psychology.create({
           data: {
@@ -36,8 +42,8 @@ export class PsychologistsService {
             city: createPsychologistDto.city,
             code_psychology: createPsychologistDto.code_psychology,
             active: createPsychologistDto.active,
-            reiting_average: createPsychologistDto.reiting_average,
-            appointment_number: createPsychologistDto.appointment_number,
+            rating_average: createPsychologistDto.rating_average,
+            appointments_number: createPsychologistDto.appointments_number,
           },
         });
       }
