@@ -5,9 +5,10 @@ import { WorkshopsModule } from './workshops/workshops.module';
 import { StudentsModule } from './students/students.module';
 import { ConfigModule } from '@nestjs/config';
 import { PsychologistsModule } from './psychologists/psychologists.module';
+import { FrequentQuestionsModule } from './frequent-questions/frequent-questions.module';
 
 @Module({
-  imports: [WorkshopsModule, StudentsModule, ConfigModule.forRoot(), PsychologistsModule],
+  imports: [WorkshopsModule, StudentsModule, ConfigModule.forRoot(), PsychologistsModule, FrequentQuestionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
