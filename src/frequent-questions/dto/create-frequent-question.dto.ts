@@ -1,4 +1,5 @@
 export class CreateFrequentQuestionDto {
-    question: string;
-    anonymous: boolean;
+  question: string;
+  anonymous: boolean;
+  auth_token: string;
 }

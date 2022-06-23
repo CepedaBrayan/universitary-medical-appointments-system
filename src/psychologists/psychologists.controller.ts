@@ -20,4 +20,9 @@ export class PsychologistsController {
   create(@Body() createPsychologistDto: CreatePsychologistDto) {
     return this.psychologistsService.create(createPsychologistDto);
   }
+
+  @Post('/login')
+  login(@Body() loginPsychologistDto: LoginPsychologistDto) {
+    return this.psychologistsService.login(loginPsychologistDto);
+  }
 }

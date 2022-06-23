@@ -92,13 +92,13 @@ export class PsychologistsService {
   async authSuperuser(auth_token: string): Promise<boolean> {
     const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
     const now: any = new Date().getTime() / 1000;
-    if (
-      !decodedJwtAccessToken ||
-      !(await prisma.superuser.findUnique({
-        where: { id: decodedJwtAccessToken.id },
-      })) ||
-      now > decodedJwtAccessToken.exp
-    )
+    const search = await prisma.superuser.findMany({
+      where: {
+        id: decodedJwtAccessToken.id,
+        nickname: decodedJwtAccessToken.nickname,
+      },
+    });
+    if (!decodedJwtAccessToken || !search[0] || now > decodedJwtAccessToken.exp)
       return false;
     return true;
   }
