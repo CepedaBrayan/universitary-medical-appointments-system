@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-06-2022 a las 16:02:26
+-- Tiempo de generación: 23-06-2022 a las 13:36:27
 -- Versión del servidor: 10.4.16-MariaDB
 -- Versión de PHP: 7.4.12
 
@@ -95,7 +95,8 @@ CREATE TABLE `psychology` (
 INSERT INTO `psychology` (`id`, `nickname`, `name`, `password`, `email`, `phone`, `city`, `code_psychology`, `active`, `rating_average`, `appointments_number`, `created_at`, `updated_at`) VALUES
 (1, 'm', 'string', '$2b$10$RgDjliFpzNAWhx.HZT', 'string', 'string', 'string', '11', 1, 10, 5, '2022-06-14 23:20:17', '2022-06-14 23:20:17'),
 (3, 'ma', 'string', '$2b$10$fn5OFOk/aycZYG75ScXCQuDT/0Opw72oeEUlQacOFYHI7JNJfSphu', 'string@', 'string', 'string', '111', 1, 0, 5, '2022-06-22 12:52:10', '2022-06-22 12:52:10'),
-(4, 'mas', 'string', '$2b$10$Jrp1hpCj7nHsQaM4ubrJ6e1Tf1IcvWZB69zyuJ2hqe7VGg99rmRL6', 'string@a', 'string', 'string', '1112', 1, 0, 5, '2022-06-22 12:52:58', '2022-06-22 12:52:58');
+(4, 'mas', 'string', '$2b$10$Jrp1hpCj7nHsQaM4ubrJ6e1Tf1IcvWZB69zyuJ2hqe7VGg99rmRL6', 'string@a', 'string', 'string', '1112', 1, 0, 5, '2022-06-22 12:52:58', '2022-06-22 12:52:58'),
+(5, 'ta', 'ta', '$2b$10$mhyj5Yoy/S1nF.RirjyAveBjFI3XmtVy9mU6Awlnez9l87So9yUEy', 'ta@a', 'string', 'string', '11121', 1, 0, 5, '2022-06-22 22:14:40', '2022-06-22 22:14:40');
 
 -- --------------------------------------------------------
 
@@ -126,7 +127,8 @@ INSERT INTO `student` (`id`, `nickname`, `name`, `password`, `email`, `phone`, `
 (1, 'string', 'string', 'string', 'string', 'string', 'string', 'string', 1, 1, '2022-06-14 16:24:49', '2022-06-14 16:24:49'),
 (15, 'stringfy', 'string', '$2b$10$WzP2IZmm14Zq7Zw7PsENSO6Z73Dgi9pqXFJ49OfUq8Ed1IT22liM6', 'string@string.es', 'string', 'string', '11', 1, 10, '2022-06-22 12:38:53', '2022-06-22 12:38:53'),
 (16, 'Juan Pablo', 'JP', '$2b$10$x3czl2vly0D9S141sIXeP.UN20.43.dl9afog8DTTfri0SsaFZ0Xq', 'JP@string.es', '000000', 'string', '13', 1, 10, '2022-06-22 12:43:16', '2022-06-22 12:43:16'),
-(17, 'Juan Pablov', 'JP', '$2b$10$XDPVh/VIIdtX0RGDxkA4h.NuV8moMLIGqxd3KDB/nc.O6DmXqWNcq', 'JP@string.esp', '000000', 'string', '131', 1, 10, '2022-06-22 12:47:58', '2022-06-22 12:47:58');
+(17, 'Juan Pablov', 'JP', '$2b$10$XDPVh/VIIdtX0RGDxkA4h.NuV8moMLIGqxd3KDB/nc.O6DmXqWNcq', 'JP@string.esp', '000000', 'string', '131', 1, 10, '2022-06-22 12:47:58', '2022-06-22 12:47:58'),
+(18, 'yo', 'yo', '$2b$10$ubVwM42E6ct60tkQUjWNk.oK3LlmwkwXJNIiZppJgLkPg/q/dwBGC', 'yo@string.esp', '000000', 'string', '1312', 1, 10, '2022-06-22 19:12:56', '2022-06-22 19:12:56');
 
 -- --------------------------------------------------------
 
@@ -137,10 +139,17 @@ INSERT INTO `student` (`id`, `nickname`, `name`, `password`, `email`, `phone`, `
 CREATE TABLE `superuser` (
   `id` int(11) NOT NULL,
   `nickname` varchar(30) NOT NULL,
-  `password_superuser` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `superuser`
+--
+
+INSERT INTO `superuser` (`id`, `nickname`, `password`, `created_at`, `updated_at`) VALUES
+(1, 'cepe', 'cepe', '2022-06-23 06:28:40', '2022-06-23 06:28:40');
 
 -- --------------------------------------------------------
 
@@ -249,19 +258,19 @@ ALTER TABLE `medical_appointment`
 -- AUTO_INCREMENT de la tabla `psychology`
 --
 ALTER TABLE `psychology`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `superuser`
 --
 ALTER TABLE `superuser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `workshop`
