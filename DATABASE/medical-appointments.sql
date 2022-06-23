@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-06-2022 a las 13:36:27
+-- Tiempo de generación: 23-06-2022 a las 16:14:10
 -- Versión del servidor: 10.4.16-MariaDB
 -- Versión de PHP: 7.4.12
 
@@ -44,7 +44,14 @@ CREATE TABLE `frequent_questions` (
 INSERT INTO `frequent_questions` (`id`, `question`, `answer`, `asked_by`, `answered_by`, `created_at`, `updated_at`) VALUES
 (1, 'Cuándo me voy a recuperar', 'No lo sé Rick', 'Psycho', 'Psycho', '2022-06-22 08:57:26', '2022-06-22 08:57:26'),
 (2, 'Cuándo me voy a recuperar de esto?', 'No lo sé Rick', 'Student', 'Psycho', '2022-06-22 09:01:13', '2022-06-22 09:01:13'),
-(3, 'Cuándo me voy a recuperar de esto??', NULL, 'Anonymous', NULL, '2022-06-22 13:29:39', '2022-06-22 13:29:39');
+(3, 'Cuándo me voy a recuperar de esto??', 'No lo sé Rick again', 'Anonymous', 'Psycho', '2022-06-23 08:40:15', '2022-06-23 08:40:15'),
+(4, 'Cuándo me voy a recuperar de esto pana??', 'No lo sé Rick again', 'Anonymous', 'Psycho', '2022-06-23 08:32:52', '2022-06-23 08:32:52'),
+(5, 'Cuándo me voy a recuperar de esto panaaaaa??', 'No lo sé Rick again', 'Anonymous', 'Psycho', '2022-06-23 08:32:27', '2022-06-23 08:32:27'),
+(6, 'Cuándo me voy a recuperar del corazón :c??', 'No lo sé Rick again', 'Anonymous', 'ta', '2022-06-23 08:47:28', '2022-06-23 08:47:28'),
+(7, 'Cuándo me voy a recuperar del corazón  y de ella:c??', 'Nunca', 'yo', 'ta', '2022-06-23 08:47:47', '2022-06-23 08:47:47'),
+(8, 'Cuándo seré feliz??', 'Nunca', 'yo', 'superior2', '2022-06-23 08:51:05', '2022-06-23 08:51:05'),
+(9, 'Cuándo seré feliz pana??', 'Nunca', 'yo', 'superior2', '2022-06-23 09:03:54', '2022-06-23 09:03:54'),
+(10, 'Cuándo seré feliz en la vida??', 'Nunca pez', 'yo', 'ta', '2022-06-23 09:11:25', '2022-06-23 09:11:25');
 
 -- --------------------------------------------------------
 
@@ -96,7 +103,8 @@ INSERT INTO `psychology` (`id`, `nickname`, `name`, `password`, `email`, `phone`
 (1, 'm', 'string', '$2b$10$RgDjliFpzNAWhx.HZT', 'string', 'string', 'string', '11', 1, 10, 5, '2022-06-14 23:20:17', '2022-06-14 23:20:17'),
 (3, 'ma', 'string', '$2b$10$fn5OFOk/aycZYG75ScXCQuDT/0Opw72oeEUlQacOFYHI7JNJfSphu', 'string@', 'string', 'string', '111', 1, 0, 5, '2022-06-22 12:52:10', '2022-06-22 12:52:10'),
 (4, 'mas', 'string', '$2b$10$Jrp1hpCj7nHsQaM4ubrJ6e1Tf1IcvWZB69zyuJ2hqe7VGg99rmRL6', 'string@a', 'string', 'string', '1112', 1, 0, 5, '2022-06-22 12:52:58', '2022-06-22 12:52:58'),
-(5, 'ta', 'ta', '$2b$10$mhyj5Yoy/S1nF.RirjyAveBjFI3XmtVy9mU6Awlnez9l87So9yUEy', 'ta@a', 'string', 'string', '11121', 1, 0, 5, '2022-06-22 22:14:40', '2022-06-22 22:14:40');
+(5, 'ta', 'ta', '$2b$10$mhyj5Yoy/S1nF.RirjyAveBjFI3XmtVy9mU6Awlnez9l87So9yUEy', 'ta@a', 'string', 'string', '11121', 1, 0, 5, '2022-06-22 22:14:40', '2022-06-22 22:14:40'),
+(11, 'tas', 'tas', '$2b$10$NcOKHA2UKSeYv4o8SFsWwOzPclMSM/HVtzgcrYSz/58vj53h/ZDXu', 'tas@a', 'string', 'string', '1112112', 1, 0, 5, '2022-06-23 12:50:14', '2022-06-23 12:50:14');
 
 -- --------------------------------------------------------
 
@@ -149,7 +157,11 @@ CREATE TABLE `superuser` (
 --
 
 INSERT INTO `superuser` (`id`, `nickname`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'cepe', 'cepe', '2022-06-23 06:28:40', '2022-06-23 06:28:40');
+(1, 'cepe', 'cepe', '2022-06-23 06:28:40', '2022-06-23 06:28:40'),
+(2, 'superior', '$2b$10$Bv5SzAstFb/EEh87Y60R3eCICh2F4.4/mmFgAm9Hg6NiScsHW4gka', '2022-06-23 11:44:13', '2022-06-23 11:44:13'),
+(3, 'superior1', '$2b$10$Xx3ZDom.X8VO22Y9m8Noze6ChqciO9PCgNXKQY6Thsru4SezPo54u', '2022-06-23 11:50:12', '2022-06-23 11:50:12'),
+(5, 'superior2', '$2b$10$IeNMhQkbKcmjKe9O8OBP7OoHS5BlMptdevjxl/TcqbUpm7JBG3RAW', '2022-06-23 12:29:12', '2022-06-23 12:29:12'),
+(6, 'superior4', '$2b$10$tc2kD.PzwCx5GuU2gt0dRuAZ..Gmbsqy5ZBW9Kdsw044sOlQ/vsFa', '2022-06-23 13:08:48', '2022-06-23 13:08:48');
 
 -- --------------------------------------------------------
 
@@ -246,7 +258,7 @@ ALTER TABLE `workshop`
 -- AUTO_INCREMENT de la tabla `frequent_questions`
 --
 ALTER TABLE `frequent_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `medical_appointment`
@@ -258,7 +270,7 @@ ALTER TABLE `medical_appointment`
 -- AUTO_INCREMENT de la tabla `psychology`
 --
 ALTER TABLE `psychology`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `student`
@@ -270,7 +282,7 @@ ALTER TABLE `student`
 -- AUTO_INCREMENT de la tabla `superuser`
 --
 ALTER TABLE `superuser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `workshop`
