@@ -1,4 +1,4 @@
-export class LoginPsychologistDto {
+export class LoginSuperuserDto {
   nickname: string;
   password: string;
 }

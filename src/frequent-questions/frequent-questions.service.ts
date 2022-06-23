@@ -1,25 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateFrequentQuestionDto } from './dto/create-frequent-question.dto';
 import { AnswerFrequentQuestionDto } from './dto/answer-frequent-question.dto';
 import { UpdateFrequentQuestionDto } from './dto/update-frequent-question.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
 
 const prisma = new PrismaClient();
 
 @Injectable()
 export class FrequentQuestionsService {
+  constructor(private jwtService: JwtService) {}
   async create(createFrequentQuestionDto: CreateFrequentQuestionDto) {
     try {
-      
+      if (!(await this.authStudent(createFrequentQuestionDto.auth_token)))
+        throw new UnauthorizedException();
       const freq_question = await prisma.frequent_questions.findMany({
         where: {
           question: createFrequentQuestionDto.question,
-        },  
+        },
       });
-      if (freq_question.length > 0) return { message: 'Frequent question already exists' };
+      if (freq_question.length > 0)
+        return { message: 'Frequent question already exists' };
       else {
-        if(createFrequentQuestionDto.anonymous) var asker: string = 'Anonymous';
-        else var asker: string = 'Student'; // From jwt find student username and put in asker var
+        if (createFrequentQuestionDto.anonymous) {
+          var asker: string = 'Anonymous';
+        } else {
+          var decodedJwtAccessToken: any = this.jwtService.decode(
+            createFrequentQuestionDto.auth_token,
+          );
+          var asker: string = decodedJwtAccessToken.nickname;
+        }
         const newFreq_question = await prisma.frequent_questions.create({
           data: {
             question: createFrequentQuestionDto.question,
@@ -35,6 +45,8 @@ export class FrequentQuestionsService {
 
   async createAnswer(answerFrequentQuestionDto: AnswerFrequentQuestionDto) {
     try {
+      if (!(await this.authPsycho(answerFrequentQuestionDto.auth_token)))
+        throw new UnauthorizedException();
       const verify_answer = await prisma.frequent_questions.findUnique({
         where: {
           id: answerFrequentQuestionDto.question_id,
@@ -43,7 +55,10 @@ export class FrequentQuestionsService {
       if (!verify_answer) return { message: 'Question not found' };
       if (verify_answer.answer) return { message: 'Answer already exists' };
       else {
-        var answerer: string = 'Psycho'; // From jwt find psycho username and put in answerer var
+        var decodedJwtAccessToken: any = this.jwtService.decode(
+          answerFrequentQuestionDto.auth_token,
+        );
+        var answerer: string = decodedJwtAccessToken.nickname;
         const newAnswer = await prisma.frequent_questions.update({
           where: {
             id: answerFrequentQuestionDto.question_id,
@@ -53,7 +68,7 @@ export class FrequentQuestionsService {
             answered_by: answerer,
           },
         });
-      return { message: 'Frequent question answer created' };
+        return { message: 'Frequent question answer created' };
       }
     } catch (error) {
       return { message: 'Failed ' + error };
@@ -85,11 +100,31 @@ export class FrequentQuestionsService {
     }
   }
 
-  update(id: number, updateFrequentQuestionDto: UpdateFrequentQuestionDto) {
-    return `This action updates a #${id} frequentQuestion`;
+  async authStudent(auth_token: string): Promise<boolean> {
+    const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+    const now: any = new Date().getTime() / 1000;
+    const search = await prisma.student.findMany({
+      where: {
+        id: decodedJwtAccessToken.id,
+        nickname: decodedJwtAccessToken.nickname,
+      },
+    });
+    if (!decodedJwtAccessToken || !search[0] || now > decodedJwtAccessToken.exp)
+      return false;
+    return true;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} frequentQuestion`;
+  async authPsycho(auth_token: string): Promise<boolean> {
+    const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+    const now: any = new Date().getTime() / 1000;
+    const search = await prisma.psychology.findMany({
+      where: {
+        id: decodedJwtAccessToken.id,
+        nickname: decodedJwtAccessToken.nickname,
+      },
+    });
+    if (!decodedJwtAccessToken || !search[0] || now > decodedJwtAccessToken.exp)
+      return false;
+    return true;
   }
 }

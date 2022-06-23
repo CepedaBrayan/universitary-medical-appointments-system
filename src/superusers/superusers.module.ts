@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { FrequentQuestionsService } from './frequent-questions.service';
-import { FrequentQuestionsController } from './frequent-questions.controller';
+import { SuperusersService } from './superusers.service';
+import { SuperusersController } from './superusers.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 
 @Module({
-  controllers: [FrequentQuestionsController],
-  providers: [FrequentQuestionsService],
+  controllers: [SuperusersController],
+  providers: [SuperusersService],
   imports: [
     PassportModule,
     JwtModule.register({
@@ -16,4 +16,4 @@ import { jwtConstants } from './constants';
     }),
   ],
 })
-export class FrequentQuestionsModule {}
+export class SuperusersModule {}

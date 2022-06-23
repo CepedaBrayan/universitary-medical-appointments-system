@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreatePsychologistDto } from './dto/create-psychologist.dto';
 import { LoginPsychologistDto } from './dto/login-psychologist.dto';
 import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
@@ -14,6 +14,8 @@ export class PsychologistsService {
 
   async create(createPsychologistDto: CreatePsychologistDto) {
     try {
+      if (!(await this.authSuperuser(createPsychologistDto.auth_token)))
+        throw new UnauthorizedException();
       const psychoCode = await prisma.psychology.findMany({
         where: {
           code_psychology: createPsychologistDto.code_psychology,
@@ -87,19 +89,17 @@ export class PsychologistsService {
     }
   }
 
-  findAll() {
-    return `This action returns all psychologists`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} psychologist`;
-  }
-
-  update(id: number, updatePsychologistDto: UpdatePsychologistDto) {
-    return `This action updates a #${id} psychologist`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} psychologist`;
+  async authSuperuser(auth_token: string): Promise<boolean> {
+    const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+    const now: any = new Date().getTime() / 1000;
+    const search = await prisma.superuser.findMany({
+      where: {
+        id: decodedJwtAccessToken.id,
+        nickname: decodedJwtAccessToken.nickname,
+      },
+    });
+    if (!decodedJwtAccessToken || !search[0] || now > decodedJwtAccessToken.exp)
+      return false;
+    return true;
   }
 }

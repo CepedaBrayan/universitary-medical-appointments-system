@@ -6,9 +6,10 @@ import { StudentsModule } from './students/students.module';
 import { ConfigModule } from '@nestjs/config';
 import { PsychologistsModule } from './psychologists/psychologists.module';
 import { FrequentQuestionsModule } from './frequent-questions/frequent-questions.module';
+import { SuperusersModule } from './superusers/superusers.module';
 
 @Module({
-  imports: [WorkshopsModule, StudentsModule, ConfigModule.forRoot(), PsychologistsModule, FrequentQuestionsModule],
+  imports: [WorkshopsModule, StudentsModule, ConfigModule.forRoot(), PsychologistsModule, FrequentQuestionsModule, SuperusersModule],
   controllers: [AppController],
   providers: [AppService],
 })

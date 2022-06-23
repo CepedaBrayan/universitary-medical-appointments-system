@@ -60,11 +60,11 @@ model student {
 }
 
 model superuser {
-  id                 Int      @id @default(autoincrement())
-  nickname           String   @unique(map: "nickname") @db.VarChar(30)
-  password_superuser String   @db.VarChar(100)
-  created_at         DateTime @default(now()) @db.DateTime(0)
-  updated_at         DateTime @default(now()) @db.DateTime(0)
+  id         Int      @id @default(autoincrement())
+  nickname   String   @unique(map: "nickname") @db.VarChar(30)
+  password   String   @db.VarChar(100)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @db.DateTime(0)
 }
 
 model workshop {

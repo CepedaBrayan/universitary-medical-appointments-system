@@ -1,4 +1,5 @@
 export class AnswerFrequentQuestionDto {
-    question_id: number;
-    answer: string;
+  question_id: number;
+  answer: string;
+  auth_token: string;
 }
