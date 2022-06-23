@@ -101,30 +101,46 @@ export class FrequentQuestionsService {
   }
 
   async authStudent(auth_token: string): Promise<boolean> {
-    const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
-    const now: any = new Date().getTime() / 1000;
-    const search = await prisma.student.findMany({
-      where: {
-        id: decodedJwtAccessToken.id,
-        nickname: decodedJwtAccessToken.nickname,
-      },
-    });
-    if (!decodedJwtAccessToken || !search[0] || now > decodedJwtAccessToken.exp)
-      return false;
-    return true;
+    try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+      const now: any = new Date().getTime() / 1000;
+      const search = await prisma.student.findMany({
+        where: {
+          id: decodedJwtAccessToken.id,
+          nickname: decodedJwtAccessToken.nickname,
+        },
+      });
+      if (
+        !decodedJwtAccessToken ||
+        !search[0] ||
+        now > decodedJwtAccessToken.exp
+      )
+        return false;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 
   async authPsycho(auth_token: string): Promise<boolean> {
-    const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
-    const now: any = new Date().getTime() / 1000;
-    const search = await prisma.psychology.findMany({
-      where: {
-        id: decodedJwtAccessToken.id,
-        nickname: decodedJwtAccessToken.nickname,
-      },
-    });
-    if (!decodedJwtAccessToken || !search[0] || now > decodedJwtAccessToken.exp)
-      return false;
-    return true;
+    try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+      const now: any = new Date().getTime() / 1000;
+      const search = await prisma.psychology.findMany({
+        where: {
+          id: decodedJwtAccessToken.id,
+          nickname: decodedJwtAccessToken.nickname,
+        },
+      });
+      if (
+        !decodedJwtAccessToken ||
+        !search[0] ||
+        now > decodedJwtAccessToken.exp
+      )
+        return false;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

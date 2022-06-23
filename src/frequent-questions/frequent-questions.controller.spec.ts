@@ -11,7 +11,9 @@ describe('FrequentQuestionsController', () => {
       providers: [FrequentQuestionsService],
     }).compile();
 
-    controller = module.get<FrequentQuestionsController>(FrequentQuestionsController);
+    controller = module.get<FrequentQuestionsController>(
+      FrequentQuestionsController,
+    );
   });
 
   it('should be defined', () => {
