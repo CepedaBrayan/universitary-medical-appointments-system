@@ -15,10 +15,10 @@ model medical_appointment {
   date_appointment   DateTime   @db.DateTime(0)
   status_appointment String     @db.VarChar(20)
   psycho_diagnosis   String     @db.VarChar(200)
-  student_raiting    String     @db.VarChar(50)
-  psycho_treatment   Int
-  created_at         DateTime   @db.DateTime(0)
-  updated_at         DateTime   @db.DateTime(0)
+  student_rating     String     @db.VarChar(50)
+  psycho_treatment   String     @db.VarChar(100)
+  created_at         DateTime   @default(now()) @db.DateTime(0)
+  updated_at         DateTime   @default(now()) @db.DateTime(0)
   psychology         psychology @relation(fields: [psycho_id], references: [id], onUpdate: Restrict, map: "medical_appointment_ibfk_2")
   student            student    @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "medical_appointment_ibfk_1")
 
@@ -29,15 +29,15 @@ model medical_appointment {
 model psychology {
   id                  Int                   @id @default(autoincrement())
   nickname            String                @unique(map: "nickname") @db.VarChar(20)
-  name                String                @db.VarChar(25)
-  password            String                @db.VarChar(25)
-  email               String                @db.VarChar(25)
+  name                String                @db.VarChar(100)
+  password            String                @db.VarChar(100)
+  email               String                @unique(map: "email") @db.VarChar(100)
   phone               String                @db.VarChar(15)
   city                String                @db.VarChar(25)
-  code_psychology     String                @db.VarChar(7)
-  active              Boolean
-  reiting_average     Float                 @db.Float
-  appointment_number  Int
+  code_psychology     String                @unique(map: "code_psychology") @db.VarChar(7)
+  active              Boolean?              @default(true)
+  rating_average      Float?                @db.Float
+  appointments_number Int?                  @default(0)
   created_at          DateTime              @default(now()) @db.DateTime(0)
   updated_at          DateTime              @default(now()) @db.DateTime(0)
   medical_appointment medical_appointment[]
@@ -46,9 +46,9 @@ model psychology {
 model student {
   id                  Int                   @id @default(autoincrement())
   nickname            String                @unique(map: "nickname") @db.VarChar(20)
-  name                String                @db.VarChar(25)
-  password            String                @db.VarChar(25)
-  email               String                @db.VarChar(25)
+  name                String                @db.VarChar(100)
+  password            String                @db.VarChar(100)
+  email               String                @unique(map: "email") @db.VarChar(100)
   phone               String                @db.VarChar(15)
   city                String                @db.VarChar(25)
   code_student        String                @unique(map: "code_student") @db.VarChar(7)
@@ -62,16 +62,26 @@ model student {
 model superuser {
   id                 Int      @id @default(autoincrement())
   nickname           String   @unique(map: "nickname") @db.VarChar(30)
-  password_superuser String   @db.VarChar(30)
-  created_at         DateTime @db.DateTime(0)
-  updated_at         DateTime @db.DateTime(0)
+  password_superuser String   @db.VarChar(100)
+  created_at         DateTime @default(now()) @db.DateTime(0)
+  updated_at         DateTime @default(now()) @db.DateTime(0)
 }
 
 model workshop {
   id         Int      @id @default(autoincrement())
   title      String   @unique(map: "title") @db.VarChar(30)
   image      String   @db.VarChar(200)
-  body       String   @db.VarChar(100)
-  created_at DateTime @db.DateTime(0)
-  updated_at DateTime @db.DateTime(0)
+  body       String   @db.VarChar(500)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @db.DateTime(0)
+}
+
+model frequent_questions {
+  id          Int      @id @default(autoincrement())
+  question    String   @unique(map: "question") @db.VarChar(100)
+  answer      String?  @db.VarChar(500)
+  asked_by    String   @db.VarChar(50)
+  answered_by String?  @db.VarChar(50)
+  created_at  DateTime @default(now()) @db.DateTime(0)
+  updated_at  DateTime @default(now()) @db.DateTime(0)
 }
