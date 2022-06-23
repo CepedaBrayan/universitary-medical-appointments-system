@@ -20,32 +20,4 @@ export class PsychologistsController {
   create(@Body() createPsychologistDto: CreatePsychologistDto) {
     return this.psychologistsService.create(createPsychologistDto);
   }
-
-  @Get()
-  findAll() {
-    return this.psychologistsService.findAll();
-  }
-
-  @Post('/login')
-  login(@Body() loginPsychologistDto: LoginPsychologistDto) {
-    return this.psychologistsService.login(loginPsychologistDto);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.psychologistsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updatePsychologistDto: UpdatePsychologistDto,
-  ) {
-    return this.psychologistsService.update(+id, updatePsychologistDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.psychologistsService.remove(+id);
-  }
 }

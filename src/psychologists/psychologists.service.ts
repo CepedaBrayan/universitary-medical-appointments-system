@@ -14,19 +14,8 @@ export class PsychologistsService {
 
   async create(createPsychologistDto: CreatePsychologistDto) {
     try {
-      const decodedJwtAccessToken: any = this.jwtService.decode(
-        createPsychologistDto.auth_token,
-      );
-      const now: any = new Date().getTime() / 1000;
-      if (
-        !decodedJwtAccessToken ||
-        !(await prisma.superuser.findUnique({
-          where: { id: decodedJwtAccessToken.id },
-        })) ||
-        now > decodedJwtAccessToken.exp
-      )
+      if (!(await this.authSuperuser(createPsychologistDto.auth_token)))
         throw new UnauthorizedException();
-
       const psychoCode = await prisma.psychology.findMany({
         where: {
           code_psychology: createPsychologistDto.code_psychology,
@@ -100,19 +89,17 @@ export class PsychologistsService {
     }
   }
 
-  findAll() {
-    return `This action returns all psychologists`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} psychologist`;
-  }
-
-  update(id: number, updatePsychologistDto: UpdatePsychologistDto) {
-    return `This action updates a #${id} psychologist`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} psychologist`;
+  async authSuperuser(auth_token: string): Promise<boolean> {
+    const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+    const now: any = new Date().getTime() / 1000;
+    if (
+      !decodedJwtAccessToken ||
+      !(await prisma.superuser.findUnique({
+        where: { id: decodedJwtAccessToken.id },
+      })) ||
+      now > decodedJwtAccessToken.exp
+    )
+      return false;
+    return true;
   }
 }
