@@ -9,4 +9,5 @@ export class CreatePsychologistDto {
   active: boolean;
   rating_average: number;
   appointments_number: number;
+  auth_token: string;
 }

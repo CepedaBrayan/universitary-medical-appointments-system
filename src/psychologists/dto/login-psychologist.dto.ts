@@ -1,4 +1,4 @@
 export class LoginPsychologistDto {
-    nickname: string;
-    password: string;
+  nickname: string;
+  password: string;
 }

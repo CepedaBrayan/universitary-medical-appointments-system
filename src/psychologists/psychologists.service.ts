@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreatePsychologistDto } from './dto/create-psychologist.dto';
 import { LoginPsychologistDto } from './dto/login-psychologist.dto';
 import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
@@ -14,6 +14,19 @@ export class PsychologistsService {
 
   async create(createPsychologistDto: CreatePsychologistDto) {
     try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(
+        createPsychologistDto.auth_token,
+      );
+      const now: any = new Date().getTime() / 1000;
+      if (
+        !decodedJwtAccessToken ||
+        !(await prisma.superuser.findUnique({
+          where: { id: decodedJwtAccessToken.id },
+        })) ||
+        now > decodedJwtAccessToken.exp
+      )
+        throw new UnauthorizedException();
+
       const psychoCode = await prisma.psychology.findMany({
         where: {
           code_psychology: createPsychologistDto.code_psychology,
