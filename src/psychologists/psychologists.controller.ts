@@ -25,4 +25,9 @@ export class PsychologistsController {
   login(@Body() loginPsychologistDto: LoginPsychologistDto) {
     return this.psychologistsService.login(loginPsychologistDto);
   }
+
+  @Get()
+  read(@Body() payload: { auth_token: string }) {
+    return this.psychologistsService.read(payload);
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { LoginStudentDto } from './dto/login-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
@@ -87,19 +87,58 @@ export class StudentsService {
     }
   }
 
-  findAll() {
-    return `This action returns all students`;
+  async read(payload: any) {
+    try {
+      if (!(await this.authStudent(payload.auth_token)))
+        throw new UnauthorizedException();
+      var decodedJwtAccessToken: any = this.jwtService.decode(
+        payload.auth_token,
+      );
+      var id: number = decodedJwtAccessToken.id;
+      const student = await prisma.student.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: false,
+          nickname: true,
+          name: true,
+          email: true,
+          phone: true,
+          city: true,
+          code_student: true,
+          academic_program: true,
+          semester: true,
+          password: false,
+          created_at: false,
+          updated_at: false,
+        },
+      });
+      return student;
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
-  }
-
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} student`;
+  async authStudent(auth_token: string): Promise<boolean> {
+    try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+      const now: any = new Date().getTime() / 1000;
+      const search = await prisma.student.findMany({
+        where: {
+          id: decodedJwtAccessToken.id,
+          nickname: decodedJwtAccessToken.nickname,
+        },
+      });
+      if (
+        !decodedJwtAccessToken ||
+        !search[0] ||
+        now > decodedJwtAccessToken.exp
+      )
+        return false;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

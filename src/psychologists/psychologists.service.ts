@@ -89,6 +89,62 @@ export class PsychologistsService {
     }
   }
 
+  async read(payload: any) {
+    try {
+      if (!(await this.authPsycho(payload.auth_token)))
+        throw new UnauthorizedException();
+      var decodedJwtAccessToken: any = this.jwtService.decode(
+        payload.auth_token,
+      );
+      var id: number = decodedJwtAccessToken.id;
+      const student = await prisma.psychology.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: false,
+          nickname: true,
+          name: true,
+          email: true,
+          phone: true,
+          city: true,
+          code_psychology: true,
+          active: true,
+          rating_average: true,
+          appointments_number: true,
+          password: false,
+          created_at: false,
+          updated_at: false,
+        },
+      });
+      return student;
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async authPsycho(auth_token: string): Promise<boolean> {
+    try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+      const now: any = new Date().getTime() / 1000;
+      const search = await prisma.psychology.findMany({
+        where: {
+          id: decodedJwtAccessToken.id,
+          nickname: decodedJwtAccessToken.nickname,
+        },
+      });
+      if (
+        !decodedJwtAccessToken ||
+        !search[0] ||
+        now > decodedJwtAccessToken.exp
+      )
+        return false;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
+
   async authSuperuser(auth_token: string): Promise<boolean> {
     try {
       const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);

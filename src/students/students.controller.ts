@@ -21,28 +21,13 @@ export class StudentsController {
     return this.studentsService.create(createStudentDto);
   }
 
-  @Get()
-  findAll() {
-    return this.studentsService.findAll();
-  }
-
   @Post('/login')
   login(@Body() loginStudentDto: LoginStudentDto) {
     return this.studentsService.login(loginStudentDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentsService.update(+id, updateStudentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.studentsService.remove(+id);
+  @Get()
+  read(@Body() payload: { auth_token: string }) {
+    return this.studentsService.read(payload);
   }
 }
