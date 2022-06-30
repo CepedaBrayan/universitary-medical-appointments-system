@@ -11,6 +11,7 @@ import { AppointmentsService } from './appointments.service';
 import { FindPsychoAppointmentDto } from './dto/find-psycho-appointment.dto';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { CancelAppointmentDto } from './dto/cancel-appointment.dto';
+import { FinishAppointmentDto } from './dto/finish-appointment.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -43,5 +44,10 @@ export class AppointmentsController {
   @Post('/cancel-appointment')
   cancelAppointment(@Body() cancelAppointmentDto: CancelAppointmentDto) {
     return this.appointmentsService.cancelAppointment(cancelAppointmentDto);
+  }
+
+  @Post('finish-appointment')
+  finishAppointment(@Body() finishAppointmentDto: FinishAppointmentDto) {
+    return this.appointmentsService.finishAppointment(finishAppointmentDto);
   }
 }

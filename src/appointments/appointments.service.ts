@@ -3,6 +3,7 @@ import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { FindPsychoAppointmentDto } from './dto/find-psycho-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { CancelAppointmentDto } from './dto/cancel-appointment.dto';
+import { FinishAppointmentDto } from './dto/finish-appointment.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { generate } from 'rxjs';
@@ -139,6 +140,7 @@ export class AppointmentsService {
           student_id: student_id,
         },
         select: {
+          id: true,
           psychology: {
             select: {
               name: true,
@@ -173,6 +175,7 @@ export class AppointmentsService {
           psycho_id: psycho_id,
         },
         select: {
+          id: true,
           student: {
             select: {
               name: true,
@@ -206,6 +209,7 @@ export class AppointmentsService {
           id: cancelAppointmentDto.appointment_id,
         },
       });
+      if (!appointment) return { message: 'Appointment not found' };
       const student = await prisma.student.findUnique({
         where: { id: appointment.student_id },
       });
@@ -218,7 +222,6 @@ export class AppointmentsService {
       var user_id: number = decodedJwtAccessToken.id;
       if (user_id != appointment.student_id && user_id != appointment.psycho_id)
         throw new UnauthorizedException();
-      if (!appointment) return { message: 'Appointment not found' };
       if (appointment.status_appointment === 'canceled')
         return { message: 'Appointment already canceled' };
       if (appointment.status_appointment === 'finished')
@@ -266,6 +269,43 @@ export class AppointmentsService {
           },
         );
         return { message: 'Appointment canceled' };
+      }
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async finishAppointment(finishAppointmentDto: FinishAppointmentDto) {
+    try {
+      if (!(await this.authPsycho(finishAppointmentDto.auth_token)))
+        throw new UnauthorizedException();
+      const appointment = await prisma.medical_appointment.findUnique({
+        where: {
+          id: finishAppointmentDto.appointment_id,
+        },
+      });
+      if (!appointment) return { message: 'Appointment not found' };
+      var decodedJwtAccessToken: any = this.jwtService.decode(
+        finishAppointmentDto.auth_token,
+      );
+      var psycho_id: number = decodedJwtAccessToken.id;
+      if (psycho_id != appointment.psycho_id) throw new UnauthorizedException();
+      if (appointment.status_appointment === 'canceled')
+        return { message: 'Appointment already canceled' };
+      if (appointment.status_appointment === 'finished')
+        return { message: 'Appointment already finished' };
+      if (appointment.status_appointment === 'active') {
+        if (new Date() <= new Date(appointment.date_appointment))
+          return { message: 'the appointment has not been made yet' };
+        const appointmentFinished = await prisma.medical_appointment.update({
+          where: { id: finishAppointmentDto.appointment_id },
+          data: {
+            status_appointment: 'finished',
+            psycho_diagnosis: finishAppointmentDto.psycho_diagnosis,
+            psycho_treatment: finishAppointmentDto.psycho_treatment,
+          },
+        });
+        return { message: 'Appointment finished' };
       }
     } catch (error) {
       return { message: 'Failed ' + error };
