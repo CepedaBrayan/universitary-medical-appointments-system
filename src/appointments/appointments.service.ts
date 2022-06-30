@@ -231,7 +231,9 @@ export class AppointmentsService {
             new Date().getTime() <
           28800000
         )
-          return { message: 'Appointment must be at least 8 hours before' };
+          return {
+            message: 'Appointment must canceled be at least 8 hours before',
+          };
         const appointmentCanceled = await prisma.medical_appointment.update({
           where: { id: cancelAppointmentDto.appointment_id },
           data: {
