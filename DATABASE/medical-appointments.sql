@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-06-2022 a las 16:14:10
+-- Tiempo de generación: 30-06-2022 a las 14:35:55
 -- Versión del servidor: 10.4.16-MariaDB
 -- Versión de PHP: 7.4.12
 
@@ -51,7 +51,9 @@ INSERT INTO `frequent_questions` (`id`, `question`, `answer`, `asked_by`, `answe
 (7, 'Cuándo me voy a recuperar del corazón  y de ella:c??', 'Nunca', 'yo', 'ta', '2022-06-23 08:47:47', '2022-06-23 08:47:47'),
 (8, 'Cuándo seré feliz??', 'Nunca', 'yo', 'superior2', '2022-06-23 08:51:05', '2022-06-23 08:51:05'),
 (9, 'Cuándo seré feliz pana??', 'Nunca', 'yo', 'superior2', '2022-06-23 09:03:54', '2022-06-23 09:03:54'),
-(10, 'Cuándo seré feliz en la vida??', 'Nunca pez', 'yo', 'ta', '2022-06-23 09:11:25', '2022-06-23 09:11:25');
+(10, 'Cuándo seré feliz en la vida??', 'Nunca pez', 'yo', 'ta', '2022-06-23 09:11:25', '2022-06-23 09:11:25'),
+(11, 'Cuándo seré feliz en la vida pór favor??', 'No lo sé', 'yo', 'ta', '2022-06-23 15:46:55', '2022-06-23 15:46:55'),
+(12, 'Cuándo seré mejor??', 'No lo sé hijo mio', 'yo', 'ta', '2022-06-23 16:05:57', '2022-06-23 16:05:57');
 
 -- --------------------------------------------------------
 
@@ -66,12 +68,19 @@ CREATE TABLE `medical_appointment` (
   `date_request` datetime NOT NULL,
   `date_appointment` datetime NOT NULL,
   `status_appointment` varchar(20) NOT NULL,
-  `psycho_diagnosis` varchar(200) NOT NULL,
-  `student_rating` varchar(50) NOT NULL,
-  `psycho_treatment` varchar(100) NOT NULL,
+  `psycho_diagnosis` varchar(200) DEFAULT NULL,
+  `student_rating` varchar(50) DEFAULT NULL,
+  `psycho_treatment` varchar(100) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `medical_appointment`
+--
+
+INSERT INTO `medical_appointment` (`id`, `student_id`, `psycho_id`, `date_request`, `date_appointment`, `status_appointment`, `psycho_diagnosis`, `student_rating`, `psycho_treatment`, `created_at`, `updated_at`) VALUES
+(1, 16, 3, '2022-06-29 21:17:29', '2022-06-30 08:00:00', 'active', '', '', '', '2022-06-29 21:55:25', '2022-06-29 21:55:25');
 
 -- --------------------------------------------------------
 
@@ -104,7 +113,9 @@ INSERT INTO `psychology` (`id`, `nickname`, `name`, `password`, `email`, `phone`
 (3, 'ma', 'string', '$2b$10$fn5OFOk/aycZYG75ScXCQuDT/0Opw72oeEUlQacOFYHI7JNJfSphu', 'string@', 'string', 'string', '111', 1, 0, 5, '2022-06-22 12:52:10', '2022-06-22 12:52:10'),
 (4, 'mas', 'string', '$2b$10$Jrp1hpCj7nHsQaM4ubrJ6e1Tf1IcvWZB69zyuJ2hqe7VGg99rmRL6', 'string@a', 'string', 'string', '1112', 1, 0, 5, '2022-06-22 12:52:58', '2022-06-22 12:52:58'),
 (5, 'ta', 'ta', '$2b$10$mhyj5Yoy/S1nF.RirjyAveBjFI3XmtVy9mU6Awlnez9l87So9yUEy', 'ta@a', 'string', 'string', '11121', 1, 0, 5, '2022-06-22 22:14:40', '2022-06-22 22:14:40'),
-(11, 'tas', 'tas', '$2b$10$NcOKHA2UKSeYv4o8SFsWwOzPclMSM/HVtzgcrYSz/58vj53h/ZDXu', 'tas@a', 'string', 'string', '1112112', 1, 0, 5, '2022-06-23 12:50:14', '2022-06-23 12:50:14');
+(11, 'tas', 'tas', '$2b$10$NcOKHA2UKSeYv4o8SFsWwOzPclMSM/HVtzgcrYSz/58vj53h/ZDXu', 'tas@a', 'string', 'string', '1112112', 1, 0, 5, '2022-06-23 12:50:14', '2022-06-23 12:50:14'),
+(14, 'tasa', 'tasa', '$2b$10$KpHYi/g7ybkYOewjDn/H6ucQTlTt9b4NadJ6kxDzcc0NRSeWSORwC', 'tasa@a', 'string', 'string', '23', 1, 0, 5, '2022-06-23 20:42:30', '2022-06-23 20:42:30'),
+(15, 'tasaa', 'tasaa', '$2b$10$Zt9k7vK0TR3CY7jWqfMSuOtMnVIgDm6FAPJCJE8PjyoTv0y2fTpii', 'tasa@aa', 'string', 'string', '223', 1, 0, 5, '2022-06-23 21:07:37', '2022-06-23 21:07:37');
 
 -- --------------------------------------------------------
 
@@ -136,7 +147,8 @@ INSERT INTO `student` (`id`, `nickname`, `name`, `password`, `email`, `phone`, `
 (15, 'stringfy', 'string', '$2b$10$WzP2IZmm14Zq7Zw7PsENSO6Z73Dgi9pqXFJ49OfUq8Ed1IT22liM6', 'string@string.es', 'string', 'string', '11', 1, 10, '2022-06-22 12:38:53', '2022-06-22 12:38:53'),
 (16, 'Juan Pablo', 'JP', '$2b$10$x3czl2vly0D9S141sIXeP.UN20.43.dl9afog8DTTfri0SsaFZ0Xq', 'JP@string.es', '000000', 'string', '13', 1, 10, '2022-06-22 12:43:16', '2022-06-22 12:43:16'),
 (17, 'Juan Pablov', 'JP', '$2b$10$XDPVh/VIIdtX0RGDxkA4h.NuV8moMLIGqxd3KDB/nc.O6DmXqWNcq', 'JP@string.esp', '000000', 'string', '131', 1, 10, '2022-06-22 12:47:58', '2022-06-22 12:47:58'),
-(18, 'yo', 'yo', '$2b$10$ubVwM42E6ct60tkQUjWNk.oK3LlmwkwXJNIiZppJgLkPg/q/dwBGC', 'yo@string.esp', '000000', 'string', '1312', 1, 10, '2022-06-22 19:12:56', '2022-06-22 19:12:56');
+(18, 'yo', 'yo', '$2b$10$ubVwM42E6ct60tkQUjWNk.oK3LlmwkwXJNIiZppJgLkPg/q/dwBGC', 'yo@string.esp', '000000', 'string', '1312', 1, 10, '2022-06-22 19:12:56', '2022-06-22 19:12:56'),
+(19, 'yo1', 'yo1', '$2b$10$UnXia1ABf7i952GTiz2gIeiaiLGZbcUTVtZafwE9UGNOdsXx0rzIW', 'yo1@string.esp', '000000', 'string', '13121', 1, 10, '2022-06-23 20:39:44', '2022-06-23 20:39:44');
 
 -- --------------------------------------------------------
 
@@ -161,7 +173,8 @@ INSERT INTO `superuser` (`id`, `nickname`, `password`, `created_at`, `updated_at
 (2, 'superior', '$2b$10$Bv5SzAstFb/EEh87Y60R3eCICh2F4.4/mmFgAm9Hg6NiScsHW4gka', '2022-06-23 11:44:13', '2022-06-23 11:44:13'),
 (3, 'superior1', '$2b$10$Xx3ZDom.X8VO22Y9m8Noze6ChqciO9PCgNXKQY6Thsru4SezPo54u', '2022-06-23 11:50:12', '2022-06-23 11:50:12'),
 (5, 'superior2', '$2b$10$IeNMhQkbKcmjKe9O8OBP7OoHS5BlMptdevjxl/TcqbUpm7JBG3RAW', '2022-06-23 12:29:12', '2022-06-23 12:29:12'),
-(6, 'superior4', '$2b$10$tc2kD.PzwCx5GuU2gt0dRuAZ..Gmbsqy5ZBW9Kdsw044sOlQ/vsFa', '2022-06-23 13:08:48', '2022-06-23 13:08:48');
+(6, 'superior4', '$2b$10$tc2kD.PzwCx5GuU2gt0dRuAZ..Gmbsqy5ZBW9Kdsw044sOlQ/vsFa', '2022-06-23 13:08:48', '2022-06-23 13:08:48'),
+(7, 'superior11', '$2b$10$Vkw6.6a6OmG/fXcckEFuXucX8VZa0I9FPGn65iU3r9xwBQqSEAEOG', '2022-06-23 20:38:36', '2022-06-23 20:38:36');
 
 -- --------------------------------------------------------
 
@@ -258,31 +271,31 @@ ALTER TABLE `workshop`
 -- AUTO_INCREMENT de la tabla `frequent_questions`
 --
 ALTER TABLE `frequent_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `medical_appointment`
 --
 ALTER TABLE `medical_appointment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `psychology`
 --
 ALTER TABLE `psychology`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `superuser`
 --
 ALTER TABLE `superuser`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `workshop`

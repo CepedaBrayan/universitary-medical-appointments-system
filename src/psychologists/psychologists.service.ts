@@ -137,6 +137,7 @@ export class PsychologistsService {
           email: true,
         },
       });
+      if (!psychos[0]) return { message: 'No psychologists found' };
       return psychos;
     } catch (error) {
       return { message: 'Failed ' + error };

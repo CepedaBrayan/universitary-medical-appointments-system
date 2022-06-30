@@ -134,6 +134,7 @@ export class StudentsService {
           email: true,
         },
       });
+      if (!students[0]) return { message: 'No students found' };
       return students;
     } catch (error) {
       return { message: 'Failed ' + error };
