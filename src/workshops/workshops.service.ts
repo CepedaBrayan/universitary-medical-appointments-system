@@ -36,12 +36,4 @@ export class WorkshopsService {
       return { message: 'Failed ' + error };
     }
   }
-
-  update(id: number, updateWorkshopDto: UpdateWorkshopDto) {
-    return `This action updates a #${id} workshop`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} workshop`;
-  }
 }
