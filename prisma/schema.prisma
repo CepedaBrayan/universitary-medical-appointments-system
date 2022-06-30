@@ -14,9 +14,9 @@ model medical_appointment {
   date_request       DateTime   @db.DateTime(0)
   date_appointment   DateTime   @db.DateTime(0)
   status_appointment String     @db.VarChar(20)
-  psycho_diagnosis   String     @db.VarChar(200)
-  student_rating     String     @db.VarChar(50)
-  psycho_treatment   String     @db.VarChar(100)
+  psycho_diagnosis   String?    @db.VarChar(200)
+  student_rating     Int?       @default(0)
+  psycho_treatment   String?    @db.VarChar(100)
   created_at         DateTime   @default(now()) @db.DateTime(0)
   updated_at         DateTime   @default(now()) @db.DateTime(0)
   psychology         psychology @relation(fields: [psycho_id], references: [id], onUpdate: Restrict, map: "medical_appointment_ibfk_2")
@@ -36,7 +36,7 @@ model psychology {
   city                String                @db.VarChar(25)
   code_psychology     String                @unique(map: "code_psychology") @db.VarChar(7)
   active              Boolean?              @default(true)
-  rating_average      Float?                @db.Float
+  rating_average      Float?                @default(0) @db.Float
   appointments_number Int?                  @default(0)
   created_at          DateTime              @default(now()) @db.DateTime(0)
   updated_at          DateTime              @default(now()) @db.DateTime(0)
