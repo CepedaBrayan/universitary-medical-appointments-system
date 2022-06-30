@@ -12,6 +12,7 @@ import { FindPsychoAppointmentDto } from './dto/find-psycho-appointment.dto';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { CancelAppointmentDto } from './dto/cancel-appointment.dto';
 import { FinishAppointmentDto } from './dto/finish-appointment.dto';
+import { PutAppointmentRatingDto } from './dto/put-appointment-rating.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -49,5 +50,14 @@ export class AppointmentsController {
   @Post('finish-appointment')
   finishAppointment(@Body() finishAppointmentDto: FinishAppointmentDto) {
     return this.appointmentsService.finishAppointment(finishAppointmentDto);
+  }
+
+  @Post('/put-appointment-rating')
+  putAppointmentRating(
+    @Body() putAppointmentRatingDto: PutAppointmentRatingDto,
+  ) {
+    return this.appointmentsService.putAppointmentRating(
+      putAppointmentRatingDto,
+    );
   }
 }

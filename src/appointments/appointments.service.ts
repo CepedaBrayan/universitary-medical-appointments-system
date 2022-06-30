@@ -4,6 +4,7 @@ import { FindPsychoAppointmentDto } from './dto/find-psycho-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { CancelAppointmentDto } from './dto/cancel-appointment.dto';
 import { FinishAppointmentDto } from './dto/finish-appointment.dto';
+import { PutAppointmentRatingDto } from './dto/put-appointment-rating.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { generate } from 'rxjs';
@@ -307,6 +308,60 @@ export class AppointmentsService {
         });
         return { message: 'Appointment finished' };
       }
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async putAppointmentRating(putAppointmentRatingDto: PutAppointmentRatingDto) {
+    try {
+      if (!(await this.authStudent(putAppointmentRatingDto.auth_token)))
+        throw new UnauthorizedException();
+      const appointment = await prisma.medical_appointment.findUnique({
+        where: {
+          id: putAppointmentRatingDto.appointment_id,
+        },
+      });
+      if (!appointment) return { message: 'Appointment not found' };
+      var decodedJwtAccessToken: any = this.jwtService.decode(
+        putAppointmentRatingDto.auth_token,
+      );
+      var student_id: number = decodedJwtAccessToken.id;
+      if (student_id != appointment.student_id)
+        throw new UnauthorizedException();
+      if (appointment.status_appointment != 'finished')
+        return { message: 'Appointment must be finished for put a rating' };
+      if (appointment.student_rating > 0)
+        return { message: 'Appointment already rated' };
+      const appointmentRated = await prisma.medical_appointment.update({
+        where: { id: putAppointmentRatingDto.appointment_id },
+        data: {
+          student_rating: putAppointmentRatingDto.student_rating,
+        },
+      });
+      const thisPsychoAppointments = await prisma.medical_appointment.findMany({
+        where: {
+          psycho_id: appointment.psycho_id,
+          status_appointment: 'finished',
+        },
+      });
+      var psychoRating: number = 0;
+      thisPsychoAppointments.forEach((element) => {
+        psychoRating = psychoRating + element.student_rating;
+      });
+      const psycho = await prisma.psychology.findUnique({
+        where: { id: appointment.psycho_id },
+      });
+      psychoRating = psychoRating / (psycho.appointments_number + 1);
+      await prisma.psychology.update({
+        where: { id: appointment.psycho_id },
+        data: {
+          rating_average: psychoRating,
+          appointments_number: psycho.appointments_number + 1,
+        },
+      });
+
+      return { message: 'Appointment rated' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }
