@@ -10,6 +10,7 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { FindPsychoAppointmentDto } from './dto/find-psycho-appointment.dto';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { CancelAppointmentDto } from './dto/cancel-appointment.dto';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -37,5 +38,10 @@ export class AppointmentsController {
   @Get('my-appointments-psycho')
   myAppointmentsPsycho(@Body() payload: { auth_token: string }) {
     return this.appointmentsService.myAppointmentsPsycho(payload);
+  }
+
+  @Post('/cancel-appointment')
+  cancelAppointment(@Body() cancelAppointmentDto: CancelAppointmentDto) {
+    return this.appointmentsService.cancelAppointment(cancelAppointmentDto);
   }
 }
