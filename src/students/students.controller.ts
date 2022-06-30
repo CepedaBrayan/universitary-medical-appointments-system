@@ -30,4 +30,9 @@ export class StudentsController {
   read(@Body() payload: { auth_token: string }) {
     return this.studentsService.read(payload);
   }
+
+  @Get('/info')
+  info(@Body() payload: { auth_token: string }) {
+    return this.studentsService.info(payload);
+  }
 }

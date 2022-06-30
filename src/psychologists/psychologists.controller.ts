@@ -30,4 +30,9 @@ export class PsychologistsController {
   read(@Body() payload: { auth_token: string }) {
     return this.psychologistsService.read(payload);
   }
+
+  @Get('/info')
+  info(@Body() payload: { auth_token: string }) {
+    return this.psychologistsService.info(payload);
+  }
 }
