@@ -12,6 +12,33 @@ const bcrypt = require('bcrypt');
 export class PsychologistsService {
   constructor(private jwtService: JwtService) {}
 
+  async all(payload: { auth_token: string }) {
+    try {
+      if (
+        !(await this.authPsycho(payload.auth_token)) &&
+        !(await this.authStudent(payload.auth_token))
+      )
+        throw new UnauthorizedException();
+      const psychos = await prisma.psychology.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          city: true,
+          code_psychology: true,
+          active: true,
+          rating_average: true,
+          appointments_number: true,
+        },
+      });
+      if (!psychos[0]) return { message: 'No psychologists found' };
+      return psychos;
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
   async create(createPsychologistDto: CreatePsychologistDto) {
     try {
       if (!(await this.authSuperuser(createPsychologistDto.auth_token)))
