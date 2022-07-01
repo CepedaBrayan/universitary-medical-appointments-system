@@ -13,6 +13,32 @@ const saltRounds = 10;
 export class StudentsService {
   constructor(private jwtService: JwtService) {}
 
+  async all(payload: { auth_token: string }) {
+    try {
+      if (
+        !(await this.authPsycho(payload.auth_token)) &&
+        !(await this.authStudent(payload.auth_token))
+      )
+        throw new UnauthorizedException();
+      const students = await prisma.student.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          city: true,
+          code_student: true,
+          academic_program: true,
+          semester: true,
+        },
+      });
+      if (!students[0]) return { message: 'No students found' };
+      return students;
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
   async create(createStudentDto: CreateStudentDto) {
     try {
       const studentCode = await prisma.student.findMany({

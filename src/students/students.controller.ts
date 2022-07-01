@@ -35,4 +35,9 @@ export class StudentsController {
   info(@Body() payload: { auth_token: string }) {
     return this.studentsService.info(payload);
   }
+
+  @Get('/all')
+  all(@Body() payload: { auth_token: string }) {
+    return this.studentsService.all(payload);
+  }
 }
