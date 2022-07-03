@@ -7,10 +7,6 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class WorkshopsService {
-  create(createWorkshopDto: CreateWorkshopDto) {
-    return 'This action adds a new workshop';
-  }
-
   async findAll() {
     try {
       const allWorkshops = await prisma.workshop.findMany();

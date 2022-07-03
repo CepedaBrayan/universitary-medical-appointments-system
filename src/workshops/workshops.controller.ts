@@ -15,11 +15,6 @@ import { UpdateWorkshopDto } from './dto/update-workshop.dto';
 export class WorkshopsController {
   constructor(private readonly workshopsService: WorkshopsService) {}
 
-  @Post()
-  create(@Body() createWorkshopDto: CreateWorkshopDto) {
-    return this.workshopsService.create(createWorkshopDto);
-  }
-
   @Get()
   findAll() {
     return this.workshopsService.findAll();
