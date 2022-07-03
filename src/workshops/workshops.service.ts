@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateWorkshopDto } from './dto/create-workshop.dto';
 import { UpdateWorkshopDto } from './dto/update-workshop.dto';
-import { PrismaClient } from '@prisma/client';
+import { DeleteWorkshopDto } from './dto/delete-workshop.dto';
+import { PrismaClient, Prisma } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
 
 const prisma = new PrismaClient();
 
 @Injectable()
 export class WorkshopsService {
-  create(createWorkshopDto: CreateWorkshopDto) {
-    return 'This action adds a new workshop';
-  }
+  constructor(private jwtService: JwtService) {}
 
   async findAll() {
     try {
@@ -34,6 +34,72 @@ export class WorkshopsService {
       } else return { message: 'Workshop not found' };
     } catch (error) {
       return { message: 'Failed ' + error };
+    }
+  }
+
+  async create(createWorkshopDto: CreateWorkshopDto) {
+    try {
+      if (!(await this.authPsycho(createWorkshopDto.auth_token)))
+        throw new UnauthorizedException();
+      const workshops = await prisma.workshop.findMany({
+        where: {
+          title: createWorkshopDto.title,
+        },
+      });
+      if (workshops[0]) return { message: 'Workshop already exists' };
+      const createdWorkshop = await prisma.workshop.create({
+        data: {
+          title: createWorkshopDto.title,
+          image: createWorkshopDto.image,
+          body: createWorkshopDto.body,
+        },
+      });
+      return { message: 'Workshop created' };
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async delete(deleteWorkshopDto: DeleteWorkshopDto) {
+    try {
+      if (!(await this.authPsycho(deleteWorkshopDto.auth_token)))
+        throw new UnauthorizedException();
+      if (
+        !(await prisma.workshop.findUnique({
+          where: { id: deleteWorkshopDto.workshop_id },
+        }))
+      )
+        return { message: 'Workshop not found' };
+      const deletedWorkshop = await prisma.workshop.delete({
+        where: {
+          id: deleteWorkshopDto.workshop_id,
+        },
+      });
+      return { message: 'Workshop deleted' };
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async authPsycho(auth_token: string): Promise<boolean> {
+    try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+      const now: any = new Date().getTime() / 1000;
+      const search = await prisma.psychology.findMany({
+        where: {
+          id: decodedJwtAccessToken.id,
+          nickname: decodedJwtAccessToken.nickname,
+        },
+      });
+      if (
+        !decodedJwtAccessToken ||
+        !search[0] ||
+        now > decodedJwtAccessToken.exp
+      )
+        return false;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
     }
   }
 }

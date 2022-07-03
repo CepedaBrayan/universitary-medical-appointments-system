@@ -18,7 +18,7 @@ import { PutAppointmentRatingDto } from './dto/put-appointment-rating.dto';
 export class AppointmentsController {
   constructor(private readonly appointmentsService: AppointmentsService) {}
 
-  @Get('/psycho-appointments')
+  @Post('/psycho-appointments')
   findPsychoAppointments(
     @Body() findPsychoAppointmentDto: FindPsychoAppointmentDto,
   ) {
@@ -32,12 +32,12 @@ export class AppointmentsController {
     return this.appointmentsService.createAppointment(createAppointmentDto);
   }
 
-  @Get('my-appointments-student')
+  @Post('my-appointments-student')
   myAppointmentsStudent(@Body() payload: { auth_token: string }) {
     return this.appointmentsService.myAppointmentsStudent(payload);
   }
 
-  @Get('my-appointments-psycho')
+  @Post('my-appointments-psycho')
   myAppointmentsPsycho(@Body() payload: { auth_token: string }) {
     return this.appointmentsService.myAppointmentsPsycho(payload);
   }
