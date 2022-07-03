@@ -16,7 +16,7 @@ import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
 export class PsychologistsController {
   constructor(private readonly psychologistsService: PsychologistsService) {}
 
-  @Get('/all')
+  @Post('/all')
   all(@Body() payload: { auth_token: string }) {
     return this.psychologistsService.all(payload);
   }
@@ -31,12 +31,12 @@ export class PsychologistsController {
     return this.psychologistsService.login(loginPsychologistDto);
   }
 
-  @Get()
+  @Post('/read')
   read(@Body() payload: { auth_token: string }) {
     return this.psychologistsService.read(payload);
   }
 
-  @Get('/info')
+  @Post('/info')
   info(@Body() payload: { auth_token: string }) {
     return this.psychologistsService.info(payload);
   }

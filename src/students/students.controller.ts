@@ -26,17 +26,17 @@ export class StudentsController {
     return this.studentsService.login(loginStudentDto);
   }
 
-  @Get()
+  @Post('/read')
   read(@Body() payload: { auth_token: string }) {
     return this.studentsService.read(payload);
   }
 
-  @Get('/info')
+  @Post('/info')
   info(@Body() payload: { auth_token: string }) {
     return this.studentsService.info(payload);
   }
 
-  @Get('/all')
+  @Post('/all')
   all(@Body() payload: { auth_token: string }) {
     return this.studentsService.all(payload);
   }
