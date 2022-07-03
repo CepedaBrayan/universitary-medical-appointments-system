@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateWorkshopDto } from './dto/create-workshop.dto';
 import { UpdateWorkshopDto } from './dto/update-workshop.dto';
+import { DeleteWorkshopDto } from './dto/delete-workshop.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 
@@ -54,6 +55,27 @@ export class WorkshopsService {
         },
       });
       return { message: 'Workshop created' };
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async delete(deleteWorkshopDto: DeleteWorkshopDto) {
+    try {
+      if (!(await this.authPsycho(deleteWorkshopDto.auth_token)))
+        throw new UnauthorizedException();
+      if (
+        !(await prisma.workshop.findUnique({
+          where: { id: deleteWorkshopDto.workshop_id },
+        }))
+      )
+        return { message: 'Workshop not found' };
+      const deletedWorkshop = await prisma.workshop.delete({
+        where: {
+          id: deleteWorkshopDto.workshop_id,
+        },
+      });
+      return { message: 'Workshop deleted' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }
