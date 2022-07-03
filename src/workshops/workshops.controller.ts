@@ -24,4 +24,9 @@ export class WorkshopsController {
   findOne(@Param('id') id: string) {
     return this.workshopsService.findOne(+id);
   }
+
+  @Post()
+  create(@Body() createWorkshopDto: CreateWorkshopDto) {
+    return this.workshopsService.create(createWorkshopDto);
+  }
 }
