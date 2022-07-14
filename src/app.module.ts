@@ -10,15 +10,7 @@ import { SuperusersModule } from './superusers/superusers.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 
 @Module({
-  imports: [
-    WorkshopsModule,
-    StudentsModule,
-    ConfigModule.forRoot(),
-    PsychologistsModule,
-    FrequentQuestionsModule,
-    SuperusersModule,
-    AppointmentsModule,
-  ],
+  imports: [WorkshopsModule, StudentsModule, ConfigModule.forRoot(), PsychologistsModule, FrequentQuestionsModule, SuperusersModule, AppointmentsModule],
   controllers: [AppController],
   providers: [AppService],
 })
