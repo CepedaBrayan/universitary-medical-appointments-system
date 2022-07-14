@@ -1,4 +1,4 @@
 export class LoginStudentDto {
-    nickname: string;
-    password: string;
+  nickname: string;
+  password: string;
 }

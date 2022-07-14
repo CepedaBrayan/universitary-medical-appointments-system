@@ -16,4 +16,4 @@ import { jwtConstants } from './constants';
     }),
   ],
 })
-export class StudentsModule { }
+export class StudentsModule {}
