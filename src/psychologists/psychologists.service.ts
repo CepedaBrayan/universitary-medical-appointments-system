@@ -27,6 +27,7 @@ export class PsychologistsService {
           phone: true,
           city: true,
           code_psychology: true,
+          office: true,
           active: true,
           rating_average: true,
           appointments_number: true,
@@ -77,6 +78,7 @@ export class PsychologistsService {
             phone: createPsychologistDto.phone,
             city: createPsychologistDto.city,
             code_psychology: createPsychologistDto.code_psychology,
+            office: createPsychologistDto.office,
             active: createPsychologistDto.active,
             rating_average: createPsychologistDto.rating_average,
             appointments_number: createPsychologistDto.appointments_number,
@@ -124,7 +126,7 @@ export class PsychologistsService {
         payload.auth_token,
       );
       var id: number = decodedJwtAccessToken.id;
-      const student = await prisma.psychology.findUnique({
+      const psycho = await prisma.psychology.findUnique({
         where: {
           id: id,
         },
@@ -136,6 +138,7 @@ export class PsychologistsService {
           phone: true,
           city: true,
           code_psychology: true,
+          office: true,
           active: true,
           rating_average: true,
           appointments_number: true,
@@ -144,7 +147,7 @@ export class PsychologistsService {
           updated_at: false,
         },
       });
-      return student;
+      return psycho;
     } catch (error) {
       return { message: 'Failed ' + error };
     }
@@ -162,6 +165,7 @@ export class PsychologistsService {
           id: true,
           name: true,
           email: true,
+          office: true,
         },
       });
       if (!psychos[0]) return { message: 'No psychologists found' };

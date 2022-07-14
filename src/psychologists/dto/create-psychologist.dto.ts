@@ -6,6 +6,7 @@ export class CreatePsychologistDto {
   phone: string;
   city: string;
   code_psychology: string;
+  office: string;
   active: boolean;
   rating_average: number;
   appointments_number: number;

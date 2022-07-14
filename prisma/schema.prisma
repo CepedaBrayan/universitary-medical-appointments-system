@@ -35,6 +35,7 @@ model psychology {
   phone               String                @db.VarChar(15)
   city                String                @db.VarChar(25)
   code_psychology     String                @unique(map: "code_psychology") @db.VarChar(7)
+  office              String?               @db.VarChar(100)
   active              Boolean?              @default(true)
   rating_average      Float?                @default(0) @db.Float
   appointments_number Int?                  @default(0)
