@@ -52,6 +52,7 @@ export class WorkshopsService {
           title: createWorkshopDto.title,
           image: createWorkshopDto.image,
           body: createWorkshopDto.body,
+          url: createWorkshopDto.url,
         },
       });
       return { message: 'Workshop created' };
