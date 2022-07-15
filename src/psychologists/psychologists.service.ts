@@ -4,13 +4,19 @@ import { LoginPsychologistDto } from './dto/login-psychologist.dto';
 import { UpdatePsychologistDto } from './dto/update-psychologist.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import { DisablePsychologistDto } from './dto/disable-psychologist.dto';
+import { AppointmentsService } from 'src/appointments/appointments.service';
+import { CancelAppointmentDto } from 'src/appointments/dto/cancel-appointment.dto';
 
 const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 
 @Injectable()
 export class PsychologistsService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly appointmentService: AppointmentsService,
+  ) {}
 
   async all(payload: { auth_token: string }) {
     try {
@@ -166,10 +172,52 @@ export class PsychologistsService {
           name: true,
           email: true,
           office: true,
+          active: true,
         },
       });
       if (!psychos[0]) return { message: 'No psychologists found' };
       return psychos;
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async disable(disablePsychologistDto: DisablePsychologistDto) {
+    try {
+      if (!(await this.authSuperuser(disablePsychologistDto.auth_token)))
+        throw new UnauthorizedException();
+      const verify = await prisma.psychology.findUnique({
+        where: {
+          id: disablePsychologistDto.id,
+        },
+      });
+      if (!verify) return { message: 'Psychologist not found' };
+      if (!verify.active) return { message: 'Psychologist already disabled' };
+      const allAppointments = await prisma.medical_appointment.findMany({
+        where: {
+          psycho_id: disablePsychologistDto.id,
+        },
+      });
+      if (allAppointments.length > 0) {
+        allAppointments.forEach(async (appointment) => {
+          if (appointment.status_appointment === 'active') {
+            let obj = new CancelAppointmentDto();
+            obj.appointment_id = appointment.id;
+            obj.auth_token = disablePsychologistDto.auth_token;
+            const result = await this.appointmentService.cancelAppointment(obj);
+          }
+        });
+      }
+
+      const psycho = await prisma.psychology.update({
+        where: {
+          id: disablePsychologistDto.id,
+        },
+        data: {
+          active: false,
+        },
+      });
+      return { message: 'Psychologist disabled' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }
