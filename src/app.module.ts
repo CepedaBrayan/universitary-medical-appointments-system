@@ -8,9 +8,19 @@ import { PsychologistsModule } from './psychologists/psychologists.module';
 import { FrequentQuestionsModule } from './frequent-questions/frequent-questions.module';
 import { SuperusersModule } from './superusers/superusers.module';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { VideosModule } from './videos/videos.module';
 
 @Module({
-  imports: [WorkshopsModule, StudentsModule, ConfigModule.forRoot(), PsychologistsModule, FrequentQuestionsModule, SuperusersModule, AppointmentsModule],
+  imports: [
+    WorkshopsModule,
+    StudentsModule,
+    ConfigModule.forRoot(),
+    PsychologistsModule,
+    FrequentQuestionsModule,
+    SuperusersModule,
+    AppointmentsModule,
+    VideosModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

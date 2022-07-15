@@ -7,24 +7,8 @@ import { FinishAppointmentDto } from './dto/finish-appointment.dto';
 import { PutAppointmentRatingDto } from './dto/put-appointment-rating.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
-import { generate } from 'rxjs';
 
 const prisma = new PrismaClient();
-const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
-
-var transporter = nodemailer.createTransport({
-  host: 'smtp-mail.outlook.com', // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
-  port: 587, // port for secure SMTP
-  tls: {
-    ciphers: 'SSLv3',
-  },
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
 
 @Injectable()
 export class AppointmentsService {
@@ -65,6 +49,7 @@ export class AppointmentsService {
       });
 
       if (!psycho) return { message: 'Psychologist not found' };
+      if (!psycho.active) return { message: 'Psychologist not active' };
       if (new Date(createAppointmentDto.date_appointment) < new Date())
         return { message: 'Invalid date' };
       // date must be in the future
@@ -93,6 +78,20 @@ export class AppointmentsService {
           date_request: new Date(),
           date_appointment: new Date(createAppointmentDto.date_appointment),
           status_appointment: 'active',
+        },
+      });
+      const nodemailer = require('nodemailer');
+
+      var transporter = nodemailer.createTransport({
+        host: 'smtp-mail.outlook.com', // hostname
+        secureConnection: false, // TLS requires secureConnection to be false
+        port: 587, // port for secure SMTP
+        tls: {
+          ciphers: 'SSLv3',
+        },
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
         },
       });
       var mailOptions = {
@@ -202,9 +201,11 @@ export class AppointmentsService {
     try {
       if (
         !(await this.authStudent(cancelAppointmentDto.auth_token)) &&
-        !(await this.authPsycho(cancelAppointmentDto.auth_token))
+        !(await this.authPsycho(cancelAppointmentDto.auth_token)) &&
+        !(await this.authSuperuser(cancelAppointmentDto.auth_token))
       )
         throw new UnauthorizedException();
+
       const appointment = await prisma.medical_appointment.findUnique({
         where: {
           id: cancelAppointmentDto.appointment_id,
@@ -221,7 +222,11 @@ export class AppointmentsService {
         cancelAppointmentDto.auth_token,
       );
       var user_id: number = decodedJwtAccessToken.id;
-      if (user_id != appointment.student_id && user_id != appointment.psycho_id)
+      if (
+        user_id != appointment.student_id &&
+        user_id != appointment.psycho_id &&
+        !(await this.authSuperuser(cancelAppointmentDto.auth_token))
+      )
         throw new UnauthorizedException();
       if (appointment.status_appointment === 'canceled')
         return { message: 'Appointment already canceled' };
@@ -242,6 +247,21 @@ export class AppointmentsService {
           where: { id: cancelAppointmentDto.appointment_id },
           data: {
             status_appointment: 'canceled',
+          },
+        });
+
+        const nodemailer = require('nodemailer');
+
+        var transporter = nodemailer.createTransport({
+          host: 'smtp-mail.outlook.com', // hostname
+          secureConnection: false, // TLS requires secureConnection to be false
+          port: 587, // port for secure SMTP
+          tls: {
+            ciphers: 'SSLv3',
+          },
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
           },
         });
 
@@ -394,6 +414,28 @@ export class AppointmentsService {
       const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
       const now: any = new Date().getTime() / 1000;
       const search = await prisma.psychology.findMany({
+        where: {
+          id: decodedJwtAccessToken.id,
+          nickname: decodedJwtAccessToken.nickname,
+        },
+      });
+      if (
+        !decodedJwtAccessToken ||
+        !search[0] ||
+        now > decodedJwtAccessToken.exp
+      )
+        return false;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  async authSuperuser(auth_token: string): Promise<boolean> {
+    try {
+      const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);
+      const now: any = new Date().getTime() / 1000;
+      const search = await prisma.superuser.findMany({
         where: {
           id: decodedJwtAccessToken.id,
           nickname: decodedJwtAccessToken.nickname,

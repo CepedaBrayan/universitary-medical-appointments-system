@@ -167,6 +167,37 @@ export class StudentsService {
     }
   }
 
+  async update(updateStudentDto: UpdateStudentDto) {
+    try {
+      if (!(await this.authStudent(updateStudentDto.auth_token)))
+        throw new UnauthorizedException();
+      var decodedJwtAccessToken: any = this.jwtService.decode(
+        updateStudentDto.auth_token,
+      );
+      var id: number = decodedJwtAccessToken.id;
+      const student = await prisma.student.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      if (!student) return { message: 'Student not found' };
+      const updatedStudent = await prisma.student.update({
+        where: {
+          id: id,
+        },
+        data: {
+          phone: updateStudentDto.phone,
+          city: updateStudentDto.city,
+          academic_program: updateStudentDto.academic_program,
+          semester: updateStudentDto.semester,
+        },
+      });
+      return { message: 'Student updated' };
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
   async authStudent(auth_token: string): Promise<boolean> {
     try {
       const decodedJwtAccessToken: any = this.jwtService.decode(auth_token);

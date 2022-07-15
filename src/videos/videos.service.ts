@@ -1,22 +1,22 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateWorkshopDto } from './dto/create-workshop.dto';
-import { UpdateWorkshopDto } from './dto/update-workshop.dto';
-import { DeleteWorkshopDto } from './dto/delete-workshop.dto';
+import { CreateVideoDto } from './dto/create-video.dto';
+import { UpdateVideoDto } from './dto/update-video.dto';
+import { DeleteVideoDto } from './dto/delete-video.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 
 const prisma = new PrismaClient();
 
 @Injectable()
-export class WorkshopsService {
+export class VideosService {
   constructor(private jwtService: JwtService) {}
 
   async findAll() {
     try {
-      const allWorkshops = await prisma.workshop.findMany();
-      if (allWorkshops) {
-        return allWorkshops;
-      } else return { message: 'No workshops found' };
+      const allVideos = await prisma.video.findMany();
+      if (allVideos) {
+        return allVideos;
+      } else return { message: 'No videos found' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }
@@ -24,59 +24,57 @@ export class WorkshopsService {
 
   async findOne(id: number) {
     try {
-      const foundWorkshop = await prisma.workshop.findUnique({
+      const foundVideo = await prisma.video.findUnique({
         where: {
           id: id,
         },
       });
-      if (foundWorkshop) {
-        return foundWorkshop;
-      } else return { message: 'Workshop not found' };
+      if (foundVideo) {
+        return foundVideo;
+      } else return { message: 'Video not found' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }
   }
 
-  async create(createWorkshopDto: CreateWorkshopDto) {
+  async create(createVideoDto: CreateVideoDto) {
     try {
-      if (!(await this.authPsycho(createWorkshopDto.auth_token)))
+      if (!(await this.authPsycho(createVideoDto.auth_token)))
         throw new UnauthorizedException();
-      const workshops = await prisma.workshop.findMany({
+      const videos = await prisma.video.findMany({
         where: {
-          title: createWorkshopDto.title,
+          url: createVideoDto.url,
         },
       });
-      if (workshops[0]) return { message: 'Workshop already exists' };
-      const createdWorkshop = await prisma.workshop.create({
+      if (videos[0]) return { message: 'Video already exists' };
+      const createdVideo = await prisma.video.create({
         data: {
-          title: createWorkshopDto.title,
-          image: createWorkshopDto.image,
-          body: createWorkshopDto.body,
-          url: createWorkshopDto.url,
+          description: createVideoDto.description,
+          url: createVideoDto.url,
         },
       });
-      return { message: 'Workshop created' };
+      return { message: 'Video created' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }
   }
 
-  async delete(deleteWorkshopDto: DeleteWorkshopDto) {
+  async delete(deleteVideoDto: DeleteVideoDto) {
     try {
-      if (!(await this.authPsycho(deleteWorkshopDto.auth_token)))
+      if (!(await this.authPsycho(deleteVideoDto.auth_token)))
         throw new UnauthorizedException();
       if (
-        !(await prisma.workshop.findUnique({
-          where: { id: deleteWorkshopDto.workshop_id },
+        !(await prisma.video.findUnique({
+          where: { id: deleteVideoDto.video_id },
         }))
       )
-        return { message: 'Workshop not found' };
-      const deletedWorkshop = await prisma.workshop.delete({
+        return { message: 'Video not found' };
+      const deletedVideo = await prisma.video.delete({
         where: {
-          id: deleteWorkshopDto.workshop_id,
+          id: deleteVideoDto.video_id,
         },
       });
-      return { message: 'Workshop deleted' };
+      return { message: 'Video deleted' };
     } catch (error) {
       return { message: 'Failed ' + error };
     }

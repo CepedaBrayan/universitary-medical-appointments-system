@@ -59,4 +59,10 @@ export class StudentsController {
   all(@Body() payload: { auth_token: string }) {
     return this.studentsService.all(payload);
   }
+
+  @Patch()
+  @ApiTags('Student')
+  update(@Body() updateStudentDto: UpdateStudentDto) {
+    return this.studentsService.update(updateStudentDto);
+  }
 }

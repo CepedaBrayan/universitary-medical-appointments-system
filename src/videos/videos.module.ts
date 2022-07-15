@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { StudentsService } from './students.service';
-import { StudentsController } from './students.controller';
+import { VideosService } from './videos.service';
+import { VideosController } from './videos.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 
 @Module({
-  controllers: [StudentsController],
-  providers: [StudentsService],
+  controllers: [VideosController],
+  providers: [VideosService],
   imports: [
     PassportModule,
     JwtModule.register({
@@ -16,4 +16,4 @@ import { jwtConstants } from './constants';
     }),
   ],
 })
-export class StudentsModule {}
+export class VideosModule {}

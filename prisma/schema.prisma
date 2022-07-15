@@ -35,6 +35,7 @@ model psychology {
   phone               String                @db.VarChar(15)
   city                String                @db.VarChar(25)
   code_psychology     String                @unique(map: "code_psychology") @db.VarChar(7)
+  office              String?               @db.VarChar(100)
   active              Boolean?              @default(true)
   rating_average      Float?                @default(0) @db.Float
   appointments_number Int?                  @default(0)
@@ -72,6 +73,7 @@ model workshop {
   title      String   @unique(map: "title") @db.VarChar(30)
   image      String   @db.VarChar(200)
   body       String   @db.VarChar(500)
+  url        String?  @db.VarChar(200)
   created_at DateTime @default(now()) @db.DateTime(0)
   updated_at DateTime @default(now()) @db.DateTime(0)
 }
@@ -82,6 +84,14 @@ model frequent_questions {
   answer      String?  @db.VarChar(500)
   asked_by    String   @db.VarChar(50)
   answered_by String?  @db.VarChar(50)
+  created_at  DateTime @default(now()) @db.DateTime(0)
+  updated_at  DateTime @default(now()) @db.DateTime(0)
+}
+
+model video {
+  id          Int      @id @default(autoincrement())
+  description String   @db.VarChar(100)
+  url         String   @db.VarChar(200)
   created_at  DateTime @default(now()) @db.DateTime(0)
   updated_at  DateTime @default(now()) @db.DateTime(0)
 }
