@@ -10,7 +10,7 @@ import {
 import { FrequentQuestionsService } from './frequent-questions.service';
 import { CreateFrequentQuestionDto } from './dto/create-frequent-question.dto';
 import { AnswerFrequentQuestionDto } from './dto/answer-frequent-question.dto';
-import { UpdateFrequentQuestionDto } from './dto/update-frequent-question.dto';
+import { DeleteFrequentQuestionDto } from './dto/delete-frequent-question.dto';
 
 @Controller('frequent-questions')
 export class FrequentQuestionsController {
@@ -38,5 +38,10 @@ export class FrequentQuestionsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.frequentQuestionsService.findOne(+id);
+  }
+
+  @Delete()
+  remove(@Body() deleteFrequentQuestionDto: DeleteFrequentQuestionDto) {
+    return this.frequentQuestionsService.remove(deleteFrequentQuestionDto);
   }
 }

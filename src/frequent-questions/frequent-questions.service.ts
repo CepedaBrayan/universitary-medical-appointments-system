@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateFrequentQuestionDto } from './dto/create-frequent-question.dto';
 import { AnswerFrequentQuestionDto } from './dto/answer-frequent-question.dto';
-import { UpdateFrequentQuestionDto } from './dto/update-frequent-question.dto';
+import { DeleteFrequentQuestionDto } from './dto/delete-frequent-question.dto';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 
@@ -95,6 +95,29 @@ export class FrequentQuestionsService {
       if (foundQuestion) {
         return foundQuestion;
       } else return { message: 'Question not found' };
+    } catch (error) {
+      return { message: 'Failed ' + error };
+    }
+  }
+
+  async remove(deleteFrequentQuestionDto: DeleteFrequentQuestionDto) {
+    try {
+      if (!(await this.authPsycho(deleteFrequentQuestionDto.auth_token)))
+        throw new UnauthorizedException();
+      const verify_question = await prisma.frequent_questions.findUnique({
+        where: {
+          id: deleteFrequentQuestionDto.id,
+        },
+      });
+      if (!verify_question) return { message: 'Question not found' };
+      else {
+        const deletedQuestion = await prisma.frequent_questions.delete({
+          where: {
+            id: deleteFrequentQuestionDto.id,
+          },
+        });
+        return { message: 'Frequent question deleted' };
+      }
     } catch (error) {
       return { message: 'Failed ' + error };
     }
