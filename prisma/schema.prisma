@@ -87,3 +87,11 @@ model frequent_questions {
   created_at  DateTime @default(now()) @db.DateTime(0)
   updated_at  DateTime @default(now()) @db.DateTime(0)
 }
+
+model video {
+  id          Int      @id @default(autoincrement())
+  description String   @db.VarChar(100)
+  url         String   @db.VarChar(200)
+  created_at  DateTime @default(now()) @db.DateTime(0)
+  updated_at  DateTime @default(now()) @db.DateTime(0)
+}
